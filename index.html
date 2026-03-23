@@ -2,38 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Group Survey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Group Chat Survey</title>
   <style>
     :root{
-      --bg-a:#1a103d;
-      --bg-b:#0f2d52;
-      --bg-c:#0f172a;
-      --card:rgba(255,255,255,0.12);
-      --border:rgba(255,255,255,0.18);
+      --bg1:#140f2d;
+      --bg2:#0f2d52;
+      --bg3:#0b1220;
+      --card:rgba(255,255,255,0.1);
+      --card2:rgba(255,255,255,0.07);
+      --border:rgba(255,255,255,0.16);
       --text:#ffffff;
       --muted:#dbeafe;
-      --accent1:#ff4fd8;
-      --accent2:#7c3aed;
-      --accent3:#22d3ee;
-      --accent4:#f59e0b;
+      --pink:#ff4fd8;
+      --purple:#7c3aed;
+      --cyan:#22d3ee;
+      --yellow:#f59e0b;
       --danger:#ff7b9c;
-      --shadow:0 20px 60px rgba(0,0,0,0.35);
+      --success:#4ade80;
     }
 
     *{box-sizing:border-box}
 
     body{
       margin:0;
-      min-height:100vh;
       font-family:Arial, Helvetica, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at 10% 10%, rgba(255,79,216,0.35), transparent 22%),
-        radial-gradient(circle at 90% 20%, rgba(34,211,238,0.28), transparent 24%),
-        radial-gradient(circle at 30% 90%, rgba(245,158,11,0.20), transparent 24%),
-        linear-gradient(135deg, var(--bg-a), var(--bg-b) 45%, var(--bg-c));
-      padding:24px;
+        radial-gradient(circle at 10% 10%, rgba(255,79,216,0.28), transparent 20%),
+        radial-gradient(circle at 85% 20%, rgba(34,211,238,0.2), transparent 25%),
+        radial-gradient(circle at 30% 90%, rgba(245,158,11,0.14), transparent 20%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      min-height:100vh;
+      padding:20px;
     }
 
     .wrap{
@@ -43,51 +44,48 @@
 
     .hero{
       text-align:center;
-      margin-bottom:24px;
+      margin-bottom:18px;
     }
 
     .badge{
       display:inline-block;
       padding:8px 14px;
       border-radius:999px;
-      background:rgba(255,255,255,0.12);
-      border:1px solid rgba(255,255,255,0.16);
-      margin-bottom:14px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.14);
       font-weight:700;
-      font-size:0.92rem;
-      backdrop-filter:blur(10px);
+      margin-bottom:12px;
     }
 
-    .hero h1{
+    h1{
       margin:0;
-      font-size:clamp(2.2rem, 4vw, 4rem);
+      font-size:clamp(2.2rem,4vw,4rem);
       line-height:1.02;
-      letter-spacing:-1px;
     }
 
     .hero p{
       margin:12px auto 0;
-      max-width:720px;
+      max-width:700px;
       color:var(--muted);
-      font-size:1.06rem;
       line-height:1.6;
+      font-size:1.02rem;
     }
 
     .panel{
       background:var(--card);
       border:1px solid var(--border);
       border-radius:28px;
-      padding:26px;
-      backdrop-filter:blur(16px);
-      box-shadow:var(--shadow);
+      padding:22px;
+      backdrop-filter:blur(14px);
+      box-shadow:0 18px 50px rgba(0,0,0,0.3);
     }
 
-    .top-note{
-      background:linear-gradient(90deg, rgba(255,79,216,0.18), rgba(34,211,238,0.18));
-      border:1px solid rgba(255,255,255,0.16);
+    .notice{
+      background:linear-gradient(90deg, rgba(255,79,216,0.12), rgba(34,211,238,0.12));
+      border:1px solid rgba(255,255,255,0.14);
       border-radius:18px;
-      padding:16px 18px;
-      margin-bottom:22px;
+      padding:14px 16px;
+      margin-bottom:20px;
       color:#f8fafc;
       line-height:1.5;
     }
@@ -98,96 +96,135 @@
 
     label{
       display:block;
-      margin-bottom:9px;
       font-weight:800;
-      font-size:1rem;
+      margin-bottom:8px;
     }
 
     .sub{
       color:var(--muted);
+      font-size:0.93rem;
       margin-bottom:10px;
-      font-size:0.94rem;
       line-height:1.45;
     }
 
     select{
       width:100%;
-      padding:15px 16px;
+      padding:14px 15px;
+      border:none;
       border-radius:16px;
-      border:1px solid rgba(255,255,255,0.16);
-      background:rgba(9,12,25,0.72);
+      background:rgba(10,15,28,0.8);
       color:#fff;
-      font-size:1rem;
+      border:1px solid rgba(255,255,255,0.14);
       outline:none;
-      transition:0.2s ease;
+      font-size:1rem;
     }
 
     select:focus{
-      border-color:var(--accent3);
-      box-shadow:0 0 0 4px rgba(34,211,238,0.18);
+      border-color:var(--cyan);
+      box-shadow:0 0 0 4px rgba(34,211,238,0.15);
+    }
+
+    .progress-wrap{
+      margin:18px 0 24px;
+    }
+
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size:0.95rem;
+      color:var(--muted);
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+
+    .progress-bar{
+      width:100%;
+      height:14px;
+      background:rgba(255,255,255,0.08);
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--pink), var(--purple), var(--cyan));
+      transition:width 0.25s ease;
+    }
+
+    .section{
+      margin:26px 0 10px;
+    }
+
+    .section-title{
+      font-size:1.2rem;
+      font-weight:900;
+      margin:0 0 6px;
+    }
+
+    .section-sub{
+      margin:0 0 16px;
+      color:var(--muted);
+      font-size:0.95rem;
     }
 
     .grid{
       display:grid;
       grid-template-columns:1fr;
       gap:16px;
-      margin-top:18px;
     }
 
     .q-card{
-      background:rgba(255,255,255,0.08);
+      background:var(--card2);
       border:1px solid rgba(255,255,255,0.12);
       border-radius:20px;
-      padding:18px;
+      padding:16px;
     }
 
-    .q-card:nth-child(odd){
-      background:linear-gradient(180deg, rgba(255,79,216,0.08), rgba(255,255,255,0.06));
+    .q-number{
+      font-size:0.82rem;
+      font-weight:800;
+      color:#c4b5fd;
+      margin-bottom:8px;
+      letter-spacing:0.5px;
+      text-transform:uppercase;
     }
 
-    .q-card:nth-child(even){
-      background:linear-gradient(180deg, rgba(34,211,238,0.08), rgba(255,255,255,0.06));
+    .error, .success{
+      display:none;
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:16px;
+      font-weight:700;
     }
 
     .error{
-      display:none;
-      margin-top:16px;
       background:rgba(255,123,156,0.12);
       border:1px solid rgba(255,123,156,0.35);
       color:#ffe4eb;
-      border-radius:16px;
-      padding:14px 16px;
-      font-weight:700;
     }
 
     .success{
-      display:none;
-      margin-top:16px;
-      background:rgba(34,197,94,0.14);
-      border:1px solid rgba(34,197,94,0.35);
+      background:rgba(74,222,128,0.12);
+      border:1px solid rgba(74,222,128,0.35);
       color:#dcfce7;
-      border-radius:16px;
-      padding:14px 16px;
-      font-weight:700;
     }
 
     .btn{
       width:100%;
       border:none;
       border-radius:18px;
-      padding:17px 18px;
+      padding:16px 18px;
+      margin-top:18px;
       font-size:1rem;
       font-weight:900;
-      color:white;
+      color:#fff;
       cursor:pointer;
-      margin-top:16px;
-      background:linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
-      box-shadow:0 10px 24px rgba(124,58,237,0.35);
-      transition:0.2s ease;
-    }
-
-    .btn:hover{
-      transform:translateY(-1px) scale(1.005);
+      background:linear-gradient(90deg, var(--pink), var(--purple), var(--cyan));
+      box-shadow:0 12px 30px rgba(124,58,237,0.35);
     }
 
     .btn:disabled{
@@ -196,10 +233,10 @@
     }
 
     .footer-note{
-      margin-top:16px;
       text-align:center;
       color:var(--muted);
       font-size:0.92rem;
+      margin-top:14px;
     }
 
     @media (min-width: 760px){
@@ -216,14 +253,14 @@
       <h1>Group Chat Survey 👀</h1>
       <p>
         Pick your name, answer every question, and send it through.
-        You won’t be able to vote for yourself, and the results will only be revealed later.
+        You can’t vote for yourself, and the results will be revealed later.
       </p>
     </div>
 
     <div class="panel">
-      <div class="top-note">
-        <strong>Heads up:</strong> once you submit, that name is locked in and can’t submit again.
-        The answers will be revealed shortly after everyone finishes.
+      <div class="notice">
+        <strong>Heads up:</strong> once you submit, that name is locked and can’t submit again.
+        The results stay hidden until reveal time.
       </div>
 
       <form id="surveyForm">
@@ -235,69 +272,23 @@
           </select>
         </div>
 
-        <div class="grid">
-          <div class="q-card">
-            <label for="funniest">Who is the funniest?</label>
-            <select id="funniest" required disabled>
-              <option value="">Choose someone</option>
-            </select>
+        <div class="progress-wrap">
+          <div class="progress-top">
+            <span id="progressText">0 / 40 answered</span>
+            <span id="progressPercent">0%</span>
           </div>
-
-          <div class="q-card">
-            <label for="smartest">Who is the smartest?</label>
-            <select id="smartest" required disabled>
-              <option value="">Choose someone</option>
-            </select>
-          </div>
-
-          <div class="q-card">
-            <label for="alwaysLate">Who is always late?</label>
-            <select id="alwaysLate" required disabled>
-              <option value="">Choose someone</option>
-            </select>
-          </div>
-
-          <div class="q-card">
-            <label for="mostChaotic">Who is the most chaotic?</label>
-            <select id="mostChaotic" required disabled>
-              <option value="">Choose someone</option>
-            </select>
-          </div>
-
-          <div class="q-card">
-            <label for="bestDressed">Who is the best dressed?</label>
-            <select id="bestDressed" required disabled>
-              <option value="">Choose someone</option>
-            </select>
-          </div>
-
-          <div class="q-card">
-            <label for="mostLikelyViral">Who is most likely to go viral?</label>
-            <select id="mostLikelyViral" required disabled>
-              <option value="">Choose someone</option>
-            </select>
-          </div>
-
-          <div class="q-card">
-            <label for="mainCharacter">Who has the biggest main character energy?</label>
-            <select id="mainCharacter" required disabled>
-              <option value="">Choose someone</option>
-            </select>
-          </div>
-
-          <div class="q-card">
-            <label for="mostReliable">Who is the most reliable?</label>
-            <select id="mostReliable" required disabled>
-              <option value="">Choose someone</option>
-            </select>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
           </div>
         </div>
+
+        <div id="questionsContainer"></div>
 
         <div class="error" id="errorBox"></div>
         <div class="success" id="successBox"></div>
 
         <button class="btn" id="submitBtn" type="submit">Submit My Answers</button>
-        <div class="footer-note">Results will be revealed later in the GC.</div>
+        <div class="footer-note">The answers will be revealed shortly after everyone finishes.</div>
       </form>
     </div>
   </div>
@@ -329,21 +320,95 @@
       "Liekha"
     ];
 
-    const questionIds = [
-      "funniest",
-      "smartest",
-      "alwaysLate",
-      "mostChaotic",
-      "bestDressed",
-      "mostLikelyViral",
-      "mainCharacter",
-      "mostReliable"
+    const sections = [
+      {
+        title: "Personality",
+        subtitle: "Core aura, vibes, and how people see each other.",
+        questions: [
+          "Who is the funniest?",
+          "Who is the smartest?",
+          "Who is the most chaotic?",
+          "Who is the most nonchalant 😐",
+          "Who is the biggest overthinker?",
+          "Who is the most delusional (in a good way)?",
+          "Who has main character energy?",
+          "Who is the most mysterious?",
+          "Who is secretly the funniest but doesn’t try?",
+          "Who acts innocent but definitely isn’t?"
+        ]
+      },
+      {
+        title: "Chaos",
+        subtitle: "The messy section. Pure GC nonsense.",
+        questions: [
+          "Who is the biggest ragebaiter 😭",
+          "Who starts the most arguments?",
+          "Who would argue even if they’re wrong?",
+          "Who is the biggest instigator?",
+          "Who is most likely to gaslight the group?",
+          "Who disappears mid-convo the most?",
+          "Who replies the driest?",
+          "Who leaves people on delivered the longest?",
+          "Who switches sides in arguments?",
+          "Who would accidentally expose the group chat?"
+        ]
+      },
+      {
+        title: "Life Predictions",
+        subtitle: "Who’s actually making it, fumbling it, or somehow both.",
+        questions: [
+          "Who is most likely to be successful?",
+          "Who is the most street smart?",
+          "Who is the most book smart?",
+          "Who gives the best advice?",
+          "Who gives the worst advice?",
+          "Who is most likely to get rich?",
+          "Who is most likely to get cancelled?",
+          "Who is most likely to go viral?",
+          "Who is most likely to win the lottery but lose the ticket?",
+          "Who survives purely off luck?"
+        ]
+      },
+      {
+        title: "Public Embarrassment",
+        subtitle: "Unfortunate scenes and peak banter.",
+        questions: [
+          "Who is balding first 😭",
+          "Who is aging the fastest?",
+          "Who would get caught doing something embarrassing?",
+          "Who would laugh at the worst possible time?",
+          "Who is most likely to trip in public?",
+          "Who is most likely to get rejected?",
+          "Who would fold under pressure?",
+          "Who would survive longest in a zombie apocalypse?",
+          "Who is most likely to embarrass the group in public?",
+          "Who laughs during serious moments?"
+        ]
+      }
     ];
 
+    const flattenedQuestions = [];
+    sections.forEach((section, sIndex) => {
+      section.questions.forEach((question, qIndex) => {
+        flattenedQuestions.push({
+          id: `q${flattenedQuestions.length + 1}`,
+          text: question,
+          sectionIndex: sIndex,
+          questionIndex: qIndex
+        });
+      });
+    });
+
+    const TOTAL_QUESTIONS = flattenedQuestions.length;
+
     const nameSelect = document.getElementById("personName");
+    const questionsContainer = document.getElementById("questionsContainer");
     const errorBox = document.getElementById("errorBox");
     const successBox = document.getElementById("successBox");
     const submitBtn = document.getElementById("submitBtn");
+    const progressText = document.getElementById("progressText");
+    const progressPercent = document.getElementById("progressPercent");
+    const progressFill = document.getElementById("progressFill");
 
     allNames.forEach(name => {
       const option = document.createElement("option");
@@ -351,6 +416,41 @@
       option.textContent = name;
       nameSelect.appendChild(option);
     });
+
+    function renderQuestions() {
+      let globalQuestionNumber = 1;
+
+      sections.forEach((section, sectionIndex) => {
+        const sectionWrap = document.createElement("div");
+        sectionWrap.className = "section";
+
+        sectionWrap.innerHTML = `
+          <h2 class="section-title">${section.title}</h2>
+          <p class="section-sub">${section.subtitle}</p>
+          <div class="grid" id="section-grid-${sectionIndex}"></div>
+        `;
+
+        questionsContainer.appendChild(sectionWrap);
+
+        const grid = sectionWrap.querySelector(`#section-grid-${sectionIndex}`);
+
+        section.questions.forEach((questionText) => {
+          const questionId = `q${globalQuestionNumber}`;
+
+          const card = document.createElement("div");
+          card.className = "q-card";
+          card.innerHTML = `
+            <div class="q-number">Question ${globalQuestionNumber}</div>
+            <label for="${questionId}">${questionText}</label>
+            <select id="${questionId}" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          `;
+          grid.appendChild(card);
+          globalQuestionNumber++;
+        });
+      });
+    }
 
     function showError(message) {
       errorBox.textContent = message;
@@ -366,8 +466,9 @@
 
     function fillDropdown(selectId, names) {
       const select = document.getElementById(selectId);
-      select.innerHTML = '<option value="">Choose someone</option>';
+      const currentValue = select.value;
 
+      select.innerHTML = '<option value="">Choose someone</option>';
       names.forEach(name => {
         const option = document.createElement("option");
         option.value = name;
@@ -375,14 +476,18 @@
         select.appendChild(option);
       });
 
+      if (names.includes(currentValue)) {
+        select.value = currentValue;
+      }
+
       select.disabled = false;
     }
 
     function updateAnswerLists() {
       const currentUser = nameSelect.value;
 
-      questionIds.forEach(id => {
-        const select = document.getElementById(id);
+      flattenedQuestions.forEach(q => {
+        const select = document.getElementById(q.id);
 
         if (!currentUser) {
           select.innerHTML = '<option value="">Choose someone</option>';
@@ -390,14 +495,39 @@
           return;
         }
 
-        fillDropdown(id, allNames.filter(name => name !== currentUser));
+        fillDropdown(q.id, allNames.filter(name => name !== currentUser));
       });
 
       errorBox.style.display = "none";
       successBox.style.display = "none";
+      updateProgress();
     }
 
+    function updateProgress() {
+      let answered = 0;
+
+      flattenedQuestions.forEach(q => {
+        const val = document.getElementById(q.id).value;
+        if (val) answered++;
+      });
+
+      const percent = Math.round((answered / TOTAL_QUESTIONS) * 100);
+      progressText.textContent = `${answered} / ${TOTAL_QUESTIONS} answered`;
+      progressPercent.textContent = `${percent}%`;
+      progressFill.style.width = `${percent}%`;
+    }
+
+    renderQuestions();
+
     nameSelect.addEventListener("change", updateAnswerLists);
+
+    flattenedQuestions.forEach(q => {
+      document.addEventListener("change", (e) => {
+        if (e.target && e.target.id === q.id) {
+          updateProgress();
+        }
+      });
+    });
 
     document.getElementById("surveyForm").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -409,8 +539,8 @@
       }
 
       const answers = {};
-      for (const id of questionIds) {
-        const value = document.getElementById(id).value;
+      for (const q of flattenedQuestions) {
+        const value = document.getElementById(q.id).value;
         if (!value) {
           showError("Please answer every question before submitting.");
           return;
@@ -419,7 +549,7 @@
           showError("You can’t vote for yourself.");
           return;
         }
-        answers[id] = value;
+        answers[q.id] = value;
       }
 
       submitBtn.disabled = true;
@@ -442,9 +572,10 @@
           submittedAt: serverTimestamp()
         });
 
-setTimeout(() => {
-  window.location.href = `thanks.html?name=${encodeURIComponent(currentUser)}`;
-}, 900);
+        showSuccess("Submitted successfully. Sending you to the waiting page...");
+        setTimeout(() => {
+          window.location.href = `thanks.html?name=${encodeURIComponent(currentUser)}`;
+        }, 900);
       } catch (err) {
         console.error(err);
         showError("Something went wrong while submitting. Try again.");
