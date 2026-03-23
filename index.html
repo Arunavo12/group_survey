@@ -3,36 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Group Chat Survey</title>
+  <title>Group Survey</title>
   <style>
     :root{
-      --bg1:#0f172a;
-      --bg2:#1e293b;
-      --card:rgba(255,255,255,0.08);
-      --border:rgba(255,255,255,0.14);
-      --text:#f8fafc;
-      --muted:#cbd5e1;
-      --accent:#38bdf8;
-      --accent2:#a78bfa;
-      --danger:#fb7185;
+      --bg-a:#1a103d;
+      --bg-b:#0f2d52;
+      --bg-c:#0f172a;
+      --card:rgba(255,255,255,0.12);
+      --border:rgba(255,255,255,0.18);
+      --text:#ffffff;
+      --muted:#dbeafe;
+      --accent1:#ff4fd8;
+      --accent2:#7c3aed;
+      --accent3:#22d3ee;
+      --accent4:#f59e0b;
+      --danger:#ff7b9c;
+      --shadow:0 20px 60px rgba(0,0,0,0.35);
     }
 
     *{box-sizing:border-box}
 
     body{
       margin:0;
+      min-height:100vh;
       font-family:Arial, Helvetica, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 25%),
-        radial-gradient(circle at top right, rgba(167,139,250,0.18), transparent 25%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
-      min-height:100vh;
+        radial-gradient(circle at 10% 10%, rgba(255,79,216,0.35), transparent 22%),
+        radial-gradient(circle at 90% 20%, rgba(34,211,238,0.28), transparent 24%),
+        radial-gradient(circle at 30% 90%, rgba(245,158,11,0.20), transparent 24%),
+        linear-gradient(135deg, var(--bg-a), var(--bg-b) 45%, var(--bg-c));
       padding:24px;
     }
 
     .wrap{
-      max-width:900px;
+      max-width:980px;
       margin:0 auto;
     }
 
@@ -41,37 +46,50 @@
       margin-bottom:24px;
     }
 
+    .badge{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.16);
+      margin-bottom:14px;
+      font-weight:700;
+      font-size:0.92rem;
+      backdrop-filter:blur(10px);
+    }
+
     .hero h1{
-      margin:0 0 10px;
-      font-size:clamp(2rem, 4vw, 3.3rem);
-      line-height:1.05;
+      margin:0;
+      font-size:clamp(2.2rem, 4vw, 4rem);
+      line-height:1.02;
+      letter-spacing:-1px;
     }
 
     .hero p{
-      margin:0;
+      margin:12px auto 0;
+      max-width:720px;
       color:var(--muted);
-      font-size:1.05rem;
+      font-size:1.06rem;
+      line-height:1.6;
     }
 
     .panel{
       background:var(--card);
-      backdrop-filter: blur(12px);
       border:1px solid var(--border);
-      border-radius:24px;
-      padding:24px;
-      box-shadow:0 20px 50px rgba(0,0,0,0.25);
+      border-radius:28px;
+      padding:26px;
+      backdrop-filter:blur(16px);
+      box-shadow:var(--shadow);
     }
 
-    .intro{
-      margin-bottom:22px;
-      padding:16px 18px;
+    .top-note{
+      background:linear-gradient(90deg, rgba(255,79,216,0.18), rgba(34,211,238,0.18));
+      border:1px solid rgba(255,255,255,0.16);
       border-radius:18px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.09);
-    }
-
-    .intro strong{
-      color:#fff;
+      padding:16px 18px;
+      margin-bottom:22px;
+      color:#f8fafc;
+      line-height:1.5;
     }
 
     .field{
@@ -80,32 +98,33 @@
 
     label{
       display:block;
-      font-weight:700;
-      margin-bottom:8px;
+      margin-bottom:9px;
+      font-weight:800;
       font-size:1rem;
     }
 
     .sub{
       color:var(--muted);
-      font-size:0.92rem;
-      margin-top:-2px;
       margin-bottom:10px;
+      font-size:0.94rem;
+      line-height:1.45;
     }
 
     select{
       width:100%;
-      padding:14px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(15,23,42,0.9);
-      color:var(--text);
+      padding:15px 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.16);
+      background:rgba(9,12,25,0.72);
+      color:#fff;
       font-size:1rem;
       outline:none;
+      transition:0.2s ease;
     }
 
     select:focus{
-      border-color:var(--accent);
-      box-shadow:0 0 0 3px rgba(56,189,248,0.15);
+      border-color:var(--accent3);
+      box-shadow:0 0 0 4px rgba(34,211,238,0.18);
     }
 
     .grid{
@@ -116,41 +135,71 @@
     }
 
     .q-card{
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.09);
-      border-radius:18px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:20px;
       padding:18px;
+    }
+
+    .q-card:nth-child(odd){
+      background:linear-gradient(180deg, rgba(255,79,216,0.08), rgba(255,255,255,0.06));
+    }
+
+    .q-card:nth-child(even){
+      background:linear-gradient(180deg, rgba(34,211,238,0.08), rgba(255,255,255,0.06));
+    }
+
+    .error{
+      display:none;
+      margin-top:16px;
+      background:rgba(255,123,156,0.12);
+      border:1px solid rgba(255,123,156,0.35);
+      color:#ffe4eb;
+      border-radius:16px;
+      padding:14px 16px;
+      font-weight:700;
+    }
+
+    .success{
+      display:none;
+      margin-top:16px;
+      background:rgba(34,197,94,0.14);
+      border:1px solid rgba(34,197,94,0.35);
+      color:#dcfce7;
+      border-radius:16px;
+      padding:14px 16px;
+      font-weight:700;
     }
 
     .btn{
       width:100%;
       border:none;
-      border-radius:16px;
-      padding:16px 18px;
+      border-radius:18px;
+      padding:17px 18px;
       font-size:1rem;
-      font-weight:700;
+      font-weight:900;
       color:white;
       cursor:pointer;
-      background:linear-gradient(90deg, var(--accent), var(--accent2));
-      margin-top:10px;
+      margin-top:16px;
+      background:linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
+      box-shadow:0 10px 24px rgba(124,58,237,0.35);
+      transition:0.2s ease;
     }
 
     .btn:hover{
-      transform:translateY(-1px);
+      transform:translateY(-1px) scale(1.005);
     }
 
-    .note{
-      margin-top:14px;
-      color:var(--muted);
-      font-size:0.9rem;
+    .btn:disabled{
+      opacity:0.7;
+      cursor:not-allowed;
+    }
+
+    .footer-note{
+      margin-top:16px;
       text-align:center;
-    }
-
-    .error{
-      color:var(--danger);
-      font-weight:700;
-      margin-top:10px;
-      display:none;
+      color:var(--muted);
+      font-size:0.92rem;
     }
 
     @media (min-width: 760px){
@@ -163,20 +212,24 @@
 <body>
   <div class="wrap">
     <div class="hero">
+      <div class="badge">GC Awards • Anonymous Voting</div>
       <h1>Group Chat Survey 👀</h1>
-      <p>Answer honestly. You can’t vote for yourself.</p>
+      <p>
+        Pick your name, answer every question, and send it through.
+        You won’t be able to vote for yourself, and the results will only be revealed later.
+      </p>
     </div>
 
     <div class="panel">
-      <div class="intro">
-        <strong>How it works:</strong> choose your name, answer each question, and submit.
-        The results won’t be shown yet — they’ll be revealed later.
+      <div class="top-note">
+        <strong>Heads up:</strong> once you submit, that name is locked in and can’t submit again.
+        The answers will be revealed shortly after everyone finishes.
       </div>
 
       <form id="surveyForm">
         <div class="field">
           <label for="personName">Who are you?</label>
-          <div class="sub">Pick your own name first so your name gets removed from every answer.</div>
+          <div class="sub">Choose your own name first so it gets removed from every answer list.</div>
           <select id="personName" required>
             <option value="">Select your name</option>
           </select>
@@ -241,14 +294,23 @@
         </div>
 
         <div class="error" id="errorBox"></div>
+        <div class="success" id="successBox"></div>
 
-        <button class="btn" type="submit">Submit Answers</button>
-        <div class="note">Results will be revealed shortly after everyone finishes...</div>
+        <button class="btn" id="submitBtn" type="submit">Submit My Answers</button>
+        <div class="footer-note">Results will be revealed later in the GC.</div>
       </form>
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import {
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
     const allNames = [
       "Tulika",
       "Eric",
@@ -280,6 +342,8 @@
 
     const nameSelect = document.getElementById("personName");
     const errorBox = document.getElementById("errorBox");
+    const successBox = document.getElementById("successBox");
+    const submitBtn = document.getElementById("submitBtn");
 
     allNames.forEach(name => {
       const option = document.createElement("option");
@@ -287,6 +351,18 @@
       option.textContent = name;
       nameSelect.appendChild(option);
     });
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+      successBox.style.display = "none";
+    }
+
+    function showSuccess(message) {
+      successBox.textContent = message;
+      successBox.style.display = "block";
+      errorBox.style.display = "none";
+    }
 
     function fillDropdown(selectId, names) {
       const select = document.getElementById(selectId);
@@ -314,24 +390,21 @@
           return;
         }
 
-        const filtered = allNames.filter(name => name !== currentUser);
-        fillDropdown(id, filtered);
+        fillDropdown(id, allNames.filter(name => name !== currentUser));
       });
 
       errorBox.style.display = "none";
-      errorBox.textContent = "";
+      successBox.style.display = "none";
     }
 
     nameSelect.addEventListener("change", updateAnswerLists);
 
-    document.getElementById("surveyForm").addEventListener("submit", function(e) {
+    document.getElementById("surveyForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const currentUser = nameSelect.value;
-
       if (!currentUser) {
-        errorBox.textContent = "Please select your name first.";
-        errorBox.style.display = "block";
+        showError("Please select your name first.");
         return;
       }
 
@@ -339,29 +412,46 @@
       for (const id of questionIds) {
         const value = document.getElementById(id).value;
         if (!value) {
-          errorBox.textContent = "Please answer every question before submitting.";
-          errorBox.style.display = "block";
+          showError("Please answer every question before submitting.");
           return;
         }
         if (value === currentUser) {
-          errorBox.textContent = "You cannot vote for yourself.";
-          errorBox.style.display = "block";
+          showError("You can’t vote for yourself.");
           return;
         }
         answers[id] = value;
       }
 
-      // Temporary frontend-only storage for testing
-      // Replace this later with Firebase
-      const submission = {
-        user: currentUser,
-        answers,
-        submittedAt: new Date().toISOString()
-      };
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
 
-      localStorage.setItem("latestSubmission", JSON.stringify(submission));
+      try {
+        const responseRef = doc(db, "responses", currentUser.toLowerCase());
+        const existing = await getDoc(responseRef);
 
-      window.location.href = "thanks.html";
+        if (existing.exists()) {
+          showError("This name has already submitted a response.");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit My Answers";
+          return;
+        }
+
+        await setDoc(responseRef, {
+          user: currentUser,
+          answers,
+          submittedAt: serverTimestamp()
+        });
+
+        showSuccess("Submitted successfully. Sending you to the waiting page...");
+        setTimeout(() => {
+          window.location.href = "thanks.html";
+        }, 900);
+      } catch (err) {
+        console.error(err);
+        showError("Something went wrong while submitting. Try again.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit My Answers";
+      }
     });
   </script>
 </body>
