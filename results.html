@@ -1,170 +1,291 @@
-<script type="module">
-  import { db } from "./firebase-config.js";
-  import {
-    doc,
-    getDoc,
-    collection,
-    getDocs
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  const questions = [
-    "Who has the most aura?",
-    "Who is the smartest?",
-    "Who is the most chaotic?",
-    "Who is the most nonchalant 😐",
-    "Who is the biggest overthinker?",
-    "Who is the most delusional (in a good way)?",
-    "Who has main character energy?",
-    "Who is the most mysterious?",
-    "Who is secretly the funniest but doesn’t try?",
-    "Who acts innocent but definitely isn’t?",
-
-    "Who is the biggest ragebaiter 😭",
-    "Who starts the most arguments?",
-    "Who would argue even if they’re wrong?",
-    "Who is the biggest instigator?",
-    "Who is most likely to gaslight the group?",
-    "Who disappears mid-convo the most?",
-    "Who replies the driest?",
-    "Who leaves people on delivered the longest?",
-    "Who switches sides in arguments?",
-    "Who would accidentally expose the group chat?",
-
-    "Who is most likely to be successful?",
-    "Who is the most street smart?",
-    "Who is the most book smart?",
-    "Who gives the best advice?",
-    "Who gives the worst advice?",
-    "Who is most likely to get rich?",
-    "Who is most likely to get cancelled?",
-    "Who is most likely to go viral?",
-    "Who is most likely to win the lottery but lose the ticket?",
-    "Who survives purely off luck?",
-
-    "Who is balding first 😭",
-    "Who is aging the fastest?",
-    "Who would get caught doing something embarrassing?",
-    "Who would laugh at the worst possible time?",
-    "Who is most likely to trip in public?",
-    "Who is most likely to get rejected?",
-    "Who would fold under pressure?",
-    "Who would survive longest in a zombie apocalypse?",
-    "Who is most likely to embarrass the group in public?",
-    "Who laughs during serious moments?",
-
-    "Who thinks they’re better than everyone else? 😭",
-    "Who is the biggest attention seeker?",
-    "Who would snitch first in a serious situation?",
-    "Who has the worst takes in the group?",
-    "Who is the most fake nice?",
-    "Who acts the toughest but isn’t?",
-    "Who would switch up the fastest?",
-    "Who is the biggest hypocrite?",
-    "Who thinks they’re always right?",
-    "Who is the most likely to betray the group for personal gain?"
-  ];
-
-  async function loadResults() {
-    const settingsRef = doc(db, "settings", "main");
-    const settingsSnap = await getDoc(settingsRef);
-
-    const revealed = settingsSnap.exists() && settingsSnap.data().resultsRevealed === true;
-
-    if (!revealed) {
-      document.getElementById("loadingText").textContent = "Results are still hidden.";
-      return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Survey Results</title>
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      padding:24px;
+      font-family:Arial, Helvetica, sans-serif;
+      color:#fff;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,79,216,0.35), transparent 22%),
+        radial-gradient(circle at 90% 20%, rgba(34,211,238,0.28), transparent 24%),
+        radial-gradient(circle at 30% 90%, rgba(245,158,11,0.20), transparent 24%),
+        linear-gradient(135deg, #1a103d, #0f2d52 45%, #0f172a);
     }
 
-    const lockedMessage = document.getElementById("lockedMessage");
-    const resultsGrid = document.getElementById("resultsGrid");
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+    }
 
-    const querySnapshot = await getDocs(collection(db, "responses"));
-    const responses = querySnapshot.docs.map(docSnap => docSnap.data());
+    .hero{
+      text-align:center;
+      margin-bottom:24px;
+    }
 
-    lockedMessage.style.display = "none";
-    resultsGrid.style.display = "grid";
-    resultsGrid.innerHTML = "";
+    .hero h1{
+      margin:0 0 10px;
+      font-size:clamp(2rem, 4vw, 3.6rem);
+    }
 
-    let index = 0;
+    .hero p{
+      margin:0;
+      color:#dbeafe;
+    }
 
-    for (let i = 1; i <= questions.length; i++) {
-      const qid = `q${i}`;
-      const votes = {};
+    .locked, .grid{
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:28px;
+      padding:24px;
+      backdrop-filter:blur(16px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.35);
+    }
 
-      responses.forEach((data) => {
-        const chosen = data[qid] || data.answers?.[qid];
-        if (!chosen) return;
+    .locked{
+      text-align:center;
+    }
 
-        if (!votes[chosen]) {
-          votes[chosen] = 0;
-        }
-        votes[chosen] += 1;
-      });
+    .grid{
+      display:none;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:18px;
+    }
 
-      const entries = Object.entries(votes).sort((a, b) => b[1] - a[1]);
+    .card{
+      background:rgba(255,255,255,0.09);
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius:20px;
+      padding:18px;
+    }
 
-      const winnerText = entries.length
-        ? `Winner: ${entries[0][0]} (${entries[0][1]} vote${entries[0][1] === 1 ? "" : "s"})`
-        : "No votes yet";
+    .card h3{
+      margin:0 0 10px;
+      font-size:1.05rem;
+      line-height:1.4;
+    }
 
-      const card = document.createElement("div");
-      card.className = "card";
-      const canvasId = `chart-${index++}`;
+    .winner{
+      margin-bottom:12px;
+      color:#e0f2fe;
+      font-size:0.95rem;
+    }
 
-      card.innerHTML = `
-        <h3>Q${i}. ${questions[i - 1]}</h3>
-        <div class="winner">${winnerText}</div>
-        <canvas id="${canvasId}"></canvas>
-      `;
+    canvas{
+      width:100% !important;
+      height:260px !important;
+      background:#fff;
+      border-radius:16px;
+      padding:8px;
+    }
 
-      resultsGrid.appendChild(card);
+    .loading{
+      text-align:center;
+      color:#dbeafe;
+      margin-top:16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Group Chat Results 📊</h1>
+      <p>Live reveal page</p>
+    </div>
 
-      if (entries.length > 0) {
-        new Chart(document.getElementById(canvasId), {
-          type: "pie",
-          data: {
-            labels: entries.map(entry => entry[0]),
-            datasets: [{
-              data: entries.map(entry => entry[1]),
-              backgroundColor: [
-                "#ff4fd8",
-                "#22d3ee",
-                "#f59e0b",
-                "#7c3aed",
-                "#10b981",
-                "#ef4444",
-                "#3b82f6",
-                "#f97316",
-                "#14b8a6",
-                "#e879f9",
-                "#84cc16",
-                "#fb7185",
-                "#6366f1",
-                "#06b6d4",
-                "#facc15"
-              ],
-              borderColor: "#ffffff",
-              borderWidth: 2
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: {
-                  color: "#111827"
+    <div id="lockedMessage" class="locked">
+      <h2 style="margin-top:0;">The answers will be revealed shortly 👀</h2>
+      <p style="color:#dbeafe; margin-bottom:0;">Results are locked right now.</p>
+      <div class="loading" id="loadingText">Checking reveal status...</div>
+    </div>
+
+    <div id="resultsGrid" class="grid"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import {
+      doc,
+      getDoc,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const questions = [
+      "Who has the most aura?",
+      "Who is the smartest?",
+      "Who is the most chaotic?",
+      "Who is the most nonchalant 😐",
+      "Who is the biggest overthinker?",
+      "Who is the most delusional (in a good way)?",
+      "Who has main character energy?",
+      "Who is the most mysterious?",
+      "Who is secretly the funniest but doesn’t try?",
+      "Who acts innocent but definitely isn’t?",
+      "Who is the biggest ragebaiter 😭",
+      "Who starts the most arguments?",
+      "Who would argue even if they’re wrong?",
+      "Who is the biggest instigator?",
+      "Who is most likely to gaslight the group?",
+      "Who disappears mid-convo the most?",
+      "Who replies the driest?",
+      "Who leaves people on delivered the longest?",
+      "Who switches sides in arguments?",
+      "Who would accidentally expose the group chat?",
+      "Who is most likely to be successful?",
+      "Who is the most street smart?",
+      "Who is the most book smart?",
+      "Who gives the best advice?",
+      "Who gives the worst advice?",
+      "Who is most likely to get rich?",
+      "Who is most likely to get cancelled?",
+      "Who is most likely to go viral?",
+      "Who is most likely to win the lottery but lose the ticket?",
+      "Who survives purely off luck?",
+      "Who is balding first 😭",
+      "Who is aging the fastest?",
+      "Who would get caught doing something embarrassing?",
+      "Who would laugh at the worst possible time?",
+      "Who is most likely to trip in public?",
+      "Who is most likely to get rejected?",
+      "Who would fold under pressure?",
+      "Who would survive longest in a zombie apocalypse?",
+      "Who is most likely to embarrass the group in public?",
+      "Who laughs during serious moments?",
+      "Who thinks they’re better than everyone else? 😭",
+      "Who is the biggest attention seeker?",
+      "Who would snitch first in a serious situation?",
+      "Who has the worst takes in the group?",
+      "Who is the most fake nice?",
+      "Who acts the toughest but isn’t?",
+      "Who would switch up the fastest?",
+      "Who is the biggest hypocrite?",
+      "Who thinks they’re always right?",
+      "Who is the most likely to betray the group for personal gain?"
+    ];
+
+    async function loadResults() {
+      const lockedMessage = document.getElementById("lockedMessage");
+      const resultsGrid = document.getElementById("resultsGrid");
+      const loadingText = document.getElementById("loadingText");
+
+      if (!lockedMessage || !resultsGrid || !loadingText) {
+        console.error("Missing required HTML elements");
+        return;
+      }
+
+      const settingsRef = doc(db, "settings", "main");
+      const settingsSnap = await getDoc(settingsRef);
+
+      const revealed =
+        settingsSnap.exists() &&
+        settingsSnap.data().resultsRevealed === true;
+
+      if (!revealed) {
+        loadingText.textContent = "Results are still hidden.";
+        return;
+      }
+
+      const querySnapshot = await getDocs(collection(db, "responses"));
+      const responses = querySnapshot.docs.map(docSnap => docSnap.data());
+
+      lockedMessage.style.display = "none";
+      resultsGrid.style.display = "grid";
+      resultsGrid.innerHTML = "";
+
+      let index = 0;
+
+      for (let i = 1; i <= questions.length; i++) {
+        const qid = `q${i}`;
+        const votes = {};
+
+        responses.forEach((data) => {
+          const chosen = data[qid] || data.answers?.[qid];
+          if (!chosen) return;
+          votes[chosen] = (votes[chosen] || 0) + 1;
+        });
+
+        const entries = Object.entries(votes).sort((a, b) => b[1] - a[1]);
+
+        const winnerText = entries.length
+          ? (() => {
+              const topVotes = entries[0][1];
+              const winners = entries
+                .filter(entry => entry[1] === topVotes)
+                .map(entry => entry[0]);
+              return `Winner: ${winners.join(", ")} (${topVotes} vote${topVotes === 1 ? "" : "s"})`;
+            })()
+          : "No votes yet";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        const canvasId = `chart-${index++}`;
+
+        card.innerHTML = `
+          <h3>Q${i}. ${questions[i - 1]}</h3>
+          <div class="winner">${winnerText}</div>
+          <canvas id="${canvasId}"></canvas>
+        `;
+
+        resultsGrid.appendChild(card);
+
+        if (entries.length > 0) {
+          new Chart(document.getElementById(canvasId), {
+            type: "pie",
+            data: {
+              labels: entries.map(entry => entry[0]),
+              datasets: [{
+                data: entries.map(entry => entry[1]),
+                backgroundColor: [
+                  "#ff4fd8",
+                  "#22d3ee",
+                  "#f59e0b",
+                  "#7c3aed",
+                  "#10b981",
+                  "#ef4444",
+                  "#3b82f6",
+                  "#f97316",
+                  "#14b8a6",
+                  "#e879f9",
+                  "#84cc16",
+                  "#fb7185",
+                  "#6366f1",
+                  "#06b6d4",
+                  "#facc15"
+                ],
+                borderColor: "#ffffff",
+                borderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: {
+                    color: "#111827"
+                  }
                 }
               }
             }
-          }
-        });
+          });
+        }
       }
     }
-  }
 
-  loadResults().catch(err => {
-    console.error(err);
-    document.getElementById("loadingText").textContent = "Couldn’t load results yet.";
-  });
-</script>
+    loadResults().catch(err => {
+      console.error(err);
+      const loadingText = document.getElementById("loadingText");
+      if (loadingText) {
+        loadingText.textContent = "Couldn’t load results yet.";
+      }
+    });
+  </script>
+</body>
+</html>
