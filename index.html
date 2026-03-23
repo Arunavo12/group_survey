@@ -1,1 +1,368 @@
-<h1>Survey placeholder (same as before)</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Group Chat Survey</title>
+  <style>
+    :root{
+      --bg1:#0f172a;
+      --bg2:#1e293b;
+      --card:rgba(255,255,255,0.08);
+      --border:rgba(255,255,255,0.14);
+      --text:#f8fafc;
+      --muted:#cbd5e1;
+      --accent:#38bdf8;
+      --accent2:#a78bfa;
+      --danger:#fb7185;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 25%),
+        radial-gradient(circle at top right, rgba(167,139,250,0.18), transparent 25%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      padding:24px;
+    }
+
+    .wrap{
+      max-width:900px;
+      margin:0 auto;
+    }
+
+    .hero{
+      text-align:center;
+      margin-bottom:24px;
+    }
+
+    .hero h1{
+      margin:0 0 10px;
+      font-size:clamp(2rem, 4vw, 3.3rem);
+      line-height:1.05;
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:1.05rem;
+    }
+
+    .panel{
+      background:var(--card);
+      backdrop-filter: blur(12px);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,0.25);
+    }
+
+    .intro{
+      margin-bottom:22px;
+      padding:16px 18px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.09);
+    }
+
+    .intro strong{
+      color:#fff;
+    }
+
+    .field{
+      margin-bottom:18px;
+    }
+
+    label{
+      display:block;
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:1rem;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:0.92rem;
+      margin-top:-2px;
+      margin-bottom:10px;
+    }
+
+    select{
+      width:100%;
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(15,23,42,0.9);
+      color:var(--text);
+      font-size:1rem;
+      outline:none;
+    }
+
+    select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(56,189,248,0.15);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .q-card{
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.09);
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:16px;
+      padding:16px 18px;
+      font-size:1rem;
+      font-weight:700;
+      color:white;
+      cursor:pointer;
+      background:linear-gradient(90deg, var(--accent), var(--accent2));
+      margin-top:10px;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .note{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:0.9rem;
+      text-align:center;
+    }
+
+    .error{
+      color:var(--danger);
+      font-weight:700;
+      margin-top:10px;
+      display:none;
+    }
+
+    @media (min-width: 760px){
+      .grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Group Chat Survey 👀</h1>
+      <p>Answer honestly. You can’t vote for yourself.</p>
+    </div>
+
+    <div class="panel">
+      <div class="intro">
+        <strong>How it works:</strong> choose your name, answer each question, and submit.
+        The results won’t be shown yet — they’ll be revealed later.
+      </div>
+
+      <form id="surveyForm">
+        <div class="field">
+          <label for="personName">Who are you?</label>
+          <div class="sub">Pick your own name first so your name gets removed from every answer.</div>
+          <select id="personName" required>
+            <option value="">Select your name</option>
+          </select>
+        </div>
+
+        <div class="grid">
+          <div class="q-card">
+            <label for="funniest">Who is the funniest?</label>
+            <select id="funniest" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          </div>
+
+          <div class="q-card">
+            <label for="smartest">Who is the smartest?</label>
+            <select id="smartest" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          </div>
+
+          <div class="q-card">
+            <label for="alwaysLate">Who is always late?</label>
+            <select id="alwaysLate" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          </div>
+
+          <div class="q-card">
+            <label for="mostChaotic">Who is the most chaotic?</label>
+            <select id="mostChaotic" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          </div>
+
+          <div class="q-card">
+            <label for="bestDressed">Who is the best dressed?</label>
+            <select id="bestDressed" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          </div>
+
+          <div class="q-card">
+            <label for="mostLikelyViral">Who is most likely to go viral?</label>
+            <select id="mostLikelyViral" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          </div>
+
+          <div class="q-card">
+            <label for="mainCharacter">Who has the biggest main character energy?</label>
+            <select id="mainCharacter" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          </div>
+
+          <div class="q-card">
+            <label for="mostReliable">Who is the most reliable?</label>
+            <select id="mostReliable" required disabled>
+              <option value="">Choose someone</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="error" id="errorBox"></div>
+
+        <button class="btn" type="submit">Submit Answers</button>
+        <div class="note">Results will be revealed shortly after everyone finishes.</div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const allNames = [
+      "Tulika",
+      "Eric",
+      "Novo",
+      "Radha",
+      "Ayushi",
+      "Arijit",
+      "Abhijit",
+      "Srijon",
+      "Biona",
+      "Boshuda",
+      "Anik",
+      "Aman",
+      "Aush",
+      "Sushi",
+      "Liekha"
+    ];
+
+    const questionIds = [
+      "funniest",
+      "smartest",
+      "alwaysLate",
+      "mostChaotic",
+      "bestDressed",
+      "mostLikelyViral",
+      "mainCharacter",
+      "mostReliable"
+    ];
+
+    const nameSelect = document.getElementById("personName");
+    const errorBox = document.getElementById("errorBox");
+
+    allNames.forEach(name => {
+      const option = document.createElement("option");
+      option.value = name;
+      option.textContent = name;
+      nameSelect.appendChild(option);
+    });
+
+    function fillDropdown(selectId, names) {
+      const select = document.getElementById(selectId);
+      select.innerHTML = '<option value="">Choose someone</option>';
+
+      names.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+
+      select.disabled = false;
+    }
+
+    function updateAnswerLists() {
+      const currentUser = nameSelect.value;
+
+      questionIds.forEach(id => {
+        const select = document.getElementById(id);
+
+        if (!currentUser) {
+          select.innerHTML = '<option value="">Choose someone</option>';
+          select.disabled = true;
+          return;
+        }
+
+        const filtered = allNames.filter(name => name !== currentUser);
+        fillDropdown(id, filtered);
+      });
+
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+    }
+
+    nameSelect.addEventListener("change", updateAnswerLists);
+
+    document.getElementById("surveyForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const currentUser = nameSelect.value;
+
+      if (!currentUser) {
+        errorBox.textContent = "Please select your name first.";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      const answers = {};
+      for (const id of questionIds) {
+        const value = document.getElementById(id).value;
+        if (!value) {
+          errorBox.textContent = "Please answer every question before submitting.";
+          errorBox.style.display = "block";
+          return;
+        }
+        if (value === currentUser) {
+          errorBox.textContent = "You cannot vote for yourself.";
+          errorBox.style.display = "block";
+          return;
+        }
+        answers[id] = value;
+      }
+
+      // Temporary frontend-only storage for testing
+      // Replace this later with Firebase
+      const submission = {
+        user: currentUser,
+        answers,
+        submittedAt: new Date().toISOString()
+      };
+
+      localStorage.setItem("latestSubmission", JSON.stringify(submission));
+
+      window.location.href = "thanks.html";
+    });
+  </script>
+</body>
+</html>
