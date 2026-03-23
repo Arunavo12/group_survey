@@ -1,1 +1,140 @@
-<h1>Admin panel</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      padding:24px;
+      font-family:Arial, Helvetica, sans-serif;
+      color:#fff;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,79,216,0.35), transparent 22%),
+        radial-gradient(circle at 90% 20%, rgba(34,211,238,0.28), transparent 24%),
+        radial-gradient(circle at 30% 90%, rgba(245,158,11,0.20), transparent 24%),
+        linear-gradient(135deg, #1a103d, #0f2d52 45%, #0f172a);
+    }
+
+    .wrap{
+      max-width:900px;
+      margin:0 auto;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:28px;
+      padding:24px;
+      backdrop-filter:blur(16px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    h1{
+      margin-top:0;
+    }
+
+    p{
+      color:#dbeafe;
+      line-height:1.6;
+    }
+
+    .warning{
+      background:rgba(245,158,11,0.14);
+      border:1px solid rgba(245,158,11,0.34);
+      padding:14px 16px;
+      border-radius:16px;
+      margin:16px 0;
+      color:#fef3c7;
+    }
+
+    .btns{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    button{
+      width:100%;
+      padding:15px 16px;
+      border:none;
+      border-radius:16px;
+      cursor:pointer;
+      font-size:1rem;
+      font-weight:800;
+      color:#fff;
+      background:linear-gradient(90deg, #ff4fd8, #7c3aed, #22d3ee);
+    }
+
+    .secondary{
+      background:rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.18);
+    }
+
+    pre{
+      margin-top:18px;
+      padding:16px;
+      border-radius:16px;
+      background:rgba(9,12,25,0.78);
+      color:#e5e7eb;
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Admin Panel 🔐</h1>
+      <p>
+        Use this page to reveal or hide results and check submitted responses.
+      </p>
+
+      <div class="warning">
+        This admin page is not truly secure on a public GitHub Pages site.
+        Do not share this link. Later, you can protect it properly with Firebase Auth.
+      </div>
+
+      <div class="btns">
+        <button onclick="revealResults()">Reveal Results</button>
+        <button class="secondary" onclick="hideResults()">Hide Results</button>
+        <button class="secondary" onclick="viewResponses()">View Responses</button>
+      </div>
+
+      <pre id="output">No data loaded yet.</pre>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import {
+      doc,
+      setDoc,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const output = document.getElementById("output");
+
+    window.revealResults = async function () {
+      await setDoc(doc(db, "settings", "main"), { resultsRevealed: true }, { merge: true });
+      output.textContent = "Results are now revealed for everyone.";
+    };
+
+    window.hideResults = async function () {
+      await setDoc(doc(db, "settings", "main"), { resultsRevealed: false }, { merge: true });
+      output.textContent = "Results are now hidden for everyone.";
+    };
+
+    window.viewResponses = async function () {
+      const snapshot = await getDocs(collection(db, "responses"));
+      const responses = [];
+      snapshot.forEach(docSnap => responses.push(docSnap.data()));
+      output.textContent = JSON.stringify(responses, null, 2);
+    };
+  </script>
+</body>
+</html>
