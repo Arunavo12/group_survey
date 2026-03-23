@@ -274,7 +274,7 @@
 
         <div class="progress-wrap">
           <div class="progress-top">
-            <span id="progressText">0 / 40 answered</span>
+            <span id="progressText">0 / 50 answered</span>
             <span id="progressPercent">0%</span>
           </div>
           <div class="progress-bar">
@@ -324,73 +324,75 @@
       "Liekha"
     ];
 
-    const sections = [
-      {
-        title: "Personality",
-        subtitle: "Core aura, vibes, and how people see each other.",
-        questions: [
-          "Who has the most aura?",
-          "Who is the smartest?",
-          "Who is the most chaotic?",
-          "Who is the most nonchalant 😐",
-          "Who is the biggest overthinker?",
-          "Who is the most delusional (in a good way)?",
-          "Who has main character energy?",
-          "Who is the most mysterious?",
-          "Who is secretly the funniest but doesn’t try?",
-          "Who acts innocent but definitely isn’t?"
-        ]
-      },
-      {
-        title: "Chaos",
-        subtitle: "",
-        questions: [
-          "Who is the biggest ragebaiter 😭",
-          "Who starts the most arguments?",
-          "Who would argue even if they’re wrong?",
-          "Who is the biggest instigator?",
-          "Who is most likely to gaslight the group?",
-          "Who disappears mid-convo the most?",
-          "Who replies the driest?",
-          "Who leaves people on delivered the longest?",
-          "Who switches sides in arguments?",
-          "Who would accidentally expose the group chat?"
-        ]
-      },
-      {
-        title: "Life Predictions",
-        subtitle: "Who’s actually making it, fumbling it, or somehow both.",
-        questions: [
-          "Who is most likely to be successful?",
-          "Who is the most street smart?",
-          "Who is the most book smart?",
-          "Who gives the best advice?",
-          "Who gives the worst advice?",
-          "Who is most likely to get rich?",
-          "Who is most likely to get cancelled?",
-          "Who is most likely to go viral?",
-          "Who is most likely to win the lottery but lose the ticket?",
-          "Who survives purely off luck?"
-        ]
-      },
-      {
-        title: "Public Embarrassment",
-        subtitle: "Unfortunate scenes",
-        questions: [
-          "Who is balding first 😭",
-          "Who is aging the fastest?",
-          "Who would get caught doing something embarrassing?",
-          "Who would laugh at the worst possible time?",
-          "Who is most likely to trip in public?",
-          "Who is most likely to get rejected?",
-          "Who would fold under pressure?",
-          "Who would survive longest in a zombie apocalypse?",
-          "Who is most likely to embarrass the group in public?",
-          "Who laughs during serious moments?"
-        ]
-        title: "For the chaos...",
-      subtitles: "I apologise in advance...",
-      questions: [
+   const sections = [
+  {
+    title: "Personality",
+    subtitle: "Core aura, vibes, and how people see each other.",
+    questions: [
+      "Who has the most aura?",
+      "Who is the smartest?",
+      "Who is the most chaotic?",
+      "Who is the most nonchalant 😐",
+      "Who is the biggest overthinker?",
+      "Who is the most delusional (in a good way)?",
+      "Who has main character energy?",
+      "Who is the most mysterious?",
+      "Who is secretly the funniest but doesn’t try?",
+      "Who acts innocent but definitely isn’t?"
+    ]
+  },
+  {
+    title: "Chaos",
+    subtitle: "",
+    questions: [
+      "Who is the biggest ragebaiter 😭",
+      "Who starts the most arguments?",
+      "Who would argue even if they’re wrong?",
+      "Who is the biggest instigator?",
+      "Who is most likely to gaslight the group?",
+      "Who disappears mid-convo the most?",
+      "Who replies the driest?",
+      "Who leaves people on delivered the longest?",
+      "Who switches sides in arguments?",
+      "Who would accidentally expose the group chat?"
+    ]
+  },
+  {
+    title: "Life Predictions",
+    subtitle: "Who’s actually making it, fumbling it, or somehow both.",
+    questions: [
+      "Who is most likely to be successful?",
+      "Who is the most street smart?",
+      "Who is the most book smart?",
+      "Who gives the best advice?",
+      "Who gives the worst advice?",
+      "Who is most likely to get rich?",
+      "Who is most likely to get cancelled?",
+      "Who is most likely to go viral?",
+      "Who is most likely to win the lottery but lose the ticket?",
+      "Who survives purely off luck?"
+    ]
+  },
+  {
+    title: "Public Embarrassment",
+    subtitle: "Unfortunate scenes",
+    questions: [
+      "Who is balding first 😭",
+      "Who is aging the fastest?",
+      "Who would get caught doing something embarrassing?",
+      "Who would laugh at the worst possible time?",
+      "Who is most likely to trip in public?",
+      "Who is most likely to get rejected?",
+      "Who would fold under pressure?",
+      "Who would survive longest in a zombie apocalypse?",
+      "Who is most likely to embarrass the group in public?",
+      "Who laughs during serious moments?"
+    ]
+  },
+  {
+    title: "For the chaos...",
+    subtitle: "I apologise in advance...",
+    questions: [
       "Who thinks they’re better than everyone else? 😭",
       "Who is the biggest attention seeker?",
       "Who would snitch first in a serious situation?",
@@ -400,9 +402,10 @@
       "Who would switch up the fastest?",
       "Who is the biggest hypocrite?",
       "Who thinks they’re always right?",
-      "Who is the most likely to betray the group for personal gain?",
-      }
-    ];
+      "Who is the most likely to betray the group for personal gain?"
+    ]
+  }
+];
 
     const flattenedQuestions = [];
     sections.forEach((section, sIndex) => {
