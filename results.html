@@ -1,1 +1,238 @@
-<h1>Results will appear here</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Survey Results</title>
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      padding:24px;
+      font-family:Arial, Helvetica, sans-serif;
+      color:#fff;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,79,216,0.35), transparent 22%),
+        radial-gradient(circle at 90% 20%, rgba(34,211,238,0.28), transparent 24%),
+        radial-gradient(circle at 30% 90%, rgba(245,158,11,0.20), transparent 24%),
+        linear-gradient(135deg, #1a103d, #0f2d52 45%, #0f172a);
+    }
+
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    .hero{
+      text-align:center;
+      margin-bottom:24px;
+    }
+
+    .hero h1{
+      margin:0 0 10px;
+      font-size:clamp(2rem, 4vw, 3.6rem);
+    }
+
+    .hero p{
+      margin:0;
+      color:#dbeafe;
+    }
+
+    .locked, .grid{
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:28px;
+      padding:24px;
+      backdrop-filter:blur(16px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    .locked{
+      text-align:center;
+    }
+
+    .grid{
+      display:none;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.09);
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:1.05rem;
+      line-height:1.4;
+    }
+
+    .winner{
+      margin-bottom:12px;
+      color:#e0f2fe;
+      font-size:0.95rem;
+    }
+
+    canvas{
+      width:100% !important;
+      height:260px !important;
+      background:#fff;
+      border-radius:16px;
+      padding:8px;
+    }
+
+    .loading{
+      text-align:center;
+      color:#dbeafe;
+      margin-top:16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Group Chat Results 📊</h1>
+      <p>Live reveal page</p>
+    </div>
+
+    <div id="lockedMessage" class="locked">
+      <h2 style="margin-top:0;">The answers will be revealed shortly 👀</h2>
+      <p style="color:#dbeafe; margin-bottom:0;">Results are locked right now.</p>
+      <div class="loading" id="loadingText">Checking reveal status...</div>
+    </div>
+
+    <div id="resultsGrid" class="grid"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import {
+      doc,
+      getDoc,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const labelsMap = {
+      funniest: "Who is the funniest?",
+      smartest: "Who is the smartest?",
+      alwaysLate: "Who is always late?",
+      mostChaotic: "Who is the most chaotic?",
+      bestDressed: "Who is the best dressed?",
+      mostLikelyViral: "Who is most likely to go viral?",
+      mainCharacter: "Who has the biggest main character energy?",
+      mostReliable: "Who is the most reliable?"
+    };
+
+    async function loadResults() {
+      const settingsRef = doc(db, "settings", "main");
+      const settingsSnap = await getDoc(settingsRef);
+
+      const revealed = settingsSnap.exists() && settingsSnap.data().resultsRevealed === true;
+
+      if (!revealed) {
+        document.getElementById("loadingText").textContent = "Results are still hidden.";
+        return;
+      }
+
+      const lockedMessage = document.getElementById("lockedMessage");
+      const resultsGrid = document.getElementById("resultsGrid");
+
+      const querySnapshot = await getDocs(collection(db, "responses"));
+      const aggregated = {};
+
+      Object.keys(labelsMap).forEach(key => {
+        aggregated[key] = {};
+      });
+
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const answers = data.answers || {};
+
+        Object.keys(labelsMap).forEach(questionKey => {
+          const chosen = answers[questionKey];
+          if (!chosen) return;
+
+          if (!aggregated[questionKey][chosen]) {
+            aggregated[questionKey][chosen] = 0;
+          }
+          aggregated[questionKey][chosen] += 1;
+        });
+      });
+
+      lockedMessage.style.display = "none";
+      resultsGrid.style.display = "grid";
+
+      let index = 0;
+      Object.entries(aggregated).forEach(([questionKey, votes]) => {
+        const entries = Object.entries(votes).sort((a, b) => b[1] - a[1]);
+
+        const winnerText = entries.length
+          ? `Winner: ${entries[0][0]} (${entries[0][1]} vote${entries[0][1] === 1 ? "" : "s"})`
+          : "No votes yet";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        const canvasId = `chart-${index++}`;
+
+        card.innerHTML = `
+          <h3>${labelsMap[questionKey]}</h3>
+          <div class="winner">${winnerText}</div>
+          <canvas id="${canvasId}"></canvas>
+        `;
+
+        resultsGrid.appendChild(card);
+
+        new Chart(document.getElementById(canvasId), {
+          type: "pie",
+          data: {
+            labels: entries.map(entry => entry[0]),
+            datasets: [{
+              data: entries.map(entry => entry[1]),
+              backgroundColor: [
+                "#ff4fd8",
+                "#22d3ee",
+                "#f59e0b",
+                "#7c3aed",
+                "#10b981",
+                "#ef4444",
+                "#3b82f6",
+                "#f97316",
+                "#14b8a6",
+                "#e879f9",
+                "#84cc16",
+                "#fb7185",
+                "#6366f1",
+                "#06b6d4",
+                "#facc15"
+              ],
+              borderColor: "#ffffff",
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  color: "#111827"
+                }
+              }
+            }
+          }
+        });
+      });
+    }
+
+    loadResults().catch(err => {
+      console.error(err);
+      document.getElementById("loadingText").textContent = "Couldn’t load results yet.";
+    });
+  </script>
+</body>
+</html>
