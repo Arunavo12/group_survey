@@ -442,10 +442,9 @@
           submittedAt: serverTimestamp()
         });
 
-        showSuccess("Submitted successfully. Sending you to the waiting page...");
-        setTimeout(() => {
-          window.location.href = "thanks.html";
-        }, 900);
+setTimeout(() => {
+  window.location.href = `thanks.html?name=${encodeURIComponent(currentUser)}`;
+}, 900);
       } catch (err) {
         console.error(err);
         showError("Something went wrong while submitting. Try again.");
