@@ -4,354 +4,369 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Group Chat Survey</title>
-<style>
-  :root{
-    --bg1:#140f2d;
-    --bg2:#0f2d52;
-    --bg3:#0b1220;
-    --card:rgba(255,255,255,0.1);
-    --card2:rgba(255,255,255,0.07);
-    --border:rgba(255,255,255,0.16);
-    --text:#ffffff;
-    --muted:#dbeafe;
-    --pink:#ff4fd8;
-    --purple:#7c3aed;
-    --cyan:#22d3ee;
-    --yellow:#f59e0b;
-    --danger:#ff7b9c;
-    --success:#4ade80;
-  }
-
-  *{box-sizing:border-box}
-
-  html{
-    scroll-behavior:smooth;
-  }
-
-  body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    color:var(--text);
-    background:
-      radial-gradient(circle at 10% 10%, rgba(255,79,216,0.28), transparent 20%),
-      radial-gradient(circle at 85% 20%, rgba(34,211,238,0.2), transparent 25%),
-      radial-gradient(circle at 30% 90%, rgba(245,158,11,0.14), transparent 20%),
-      linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-    min-height:100vh;
-    padding:20px;
-  }
-
-  .wrap{
-    max-width:980px;
-    margin:0 auto;
-  }
-
-  .hero{
-    text-align:center;
-    margin-bottom:18px;
-  }
-
-  .badge{
-    display:inline-block;
-    padding:8px 14px;
-    border-radius:999px;
-    background:rgba(255,255,255,0.1);
-    border:1px solid rgba(255,255,255,0.14);
-    font-weight:700;
-    margin-bottom:12px;
-  }
-
-  h1{
-    margin:0;
-    font-size:clamp(2.2rem,4vw,4rem);
-    line-height:1.02;
-  }
-
-  .hero-warning{
-    margin:12px 0 0;
-    font-weight:800;
-    font-size:1rem;
-    color:#fde68a;
-    letter-spacing:0.2px;
-  }
-
-  .hero p{
-    margin:12px auto 0;
-    max-width:700px;
-    color:var(--muted);
-    line-height:1.6;
-    font-size:1.02rem;
-  }
-
-  .panel{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:28px;
-    padding:22px;
-    backdrop-filter:blur(14px);
-    box-shadow:0 18px 50px rgba(0,0,0,0.3);
-  }
-
-  .notice{
-    background:linear-gradient(90deg, rgba(255,79,216,0.12), rgba(34,211,238,0.12));
-    border:1px solid rgba(255,255,255,0.14);
-    border-radius:18px;
-    padding:14px 16px;
-    margin-bottom:20px;
-    color:#f8fafc;
-    line-height:1.5;
-  }
-
-  .field{
-    margin-bottom:18px;
-  }
-
-  label{
-    display:block;
-    font-weight:800;
-    margin-bottom:8px;
-  }
-
-  .sub{
-    color:var(--muted);
-    font-size:0.93rem;
-    margin-bottom:10px;
-    line-height:1.45;
-  }
-
-  .mini-rule{
-    display:inline-block;
-    margin-top:10px;
-    padding:8px 12px;
-    border-radius:999px;
-    background:rgba(245,158,11,0.12);
-    border:1px solid rgba(245,158,11,0.28);
-    color:#fde68a;
-    font-size:0.86rem;
-    font-weight:700;
-  }
-
-  select{
-    width:100%;
-    padding:14px 15px;
-    border:none;
-    border-radius:16px;
-    background:rgba(10,15,28,0.8);
-    color:#fff;
-    border:1px solid rgba(255,255,255,0.14);
-    outline:none;
-    font-size:1rem;
-    transition:border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-  }
-
-  select:focus{
-    border-color:var(--cyan);
-    box-shadow:0 0 0 4px rgba(34,211,238,0.15);
-  }
-
-  .progress-wrap{
-    position:sticky;
-    top:10px;
-    z-index:20;
-    padding:14px;
-    border-radius:18px;
-    background:rgba(15,23,42,0.75);
-    backdrop-filter:blur(12px);
-    border:1px solid rgba(255,255,255,0.08);
-    margin:18px 0 24px;
-    box-shadow:0 12px 28px rgba(0,0,0,0.18);
-  }
-
-  .progress-top{
-    display:flex;
-    justify-content:space-between;
-    gap:12px;
-    font-size:0.95rem;
-    color:var(--muted);
-    margin-bottom:10px;
-    flex-wrap:wrap;
-  }
-
-  .progress-bar{
-    width:100%;
-    height:14px;
-    background:rgba(255,255,255,0.08);
-    border-radius:999px;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,0.08);
-  }
-
-  .progress-fill{
-    height:100%;
-    width:0%;
-    border-radius:999px;
-    background:linear-gradient(90deg, var(--pink), var(--purple), var(--cyan));
-    transition:width 0.25s ease;
-  }
-
-  .section{
-    margin:28px 0 18px;
-    padding-top:10px;
-    border-top:1px solid rgba(255,255,255,0.08);
-  }
-
-  .section:first-of-type{
-    border-top:none;
-    padding-top:0;
-  }
-
-  .section-title{
-    font-size:1.35rem;
-    font-weight:900;
-    margin:0 0 6px;
-    color:#fff;
-  }
-
-  .section-sub{
-    margin:0 0 18px;
-    color:#cbd5e1;
-    font-size:0.96rem;
-    line-height:1.45;
-  }
-
-  .grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:16px;
-  }
-
-  .q-card{
-    background:var(--card2);
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:20px;
-    padding:16px;
-    transition:transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-  }
-
-  .q-card:hover{
-    transform:translateY(-2px);
-    border-color:rgba(255,255,255,0.22);
-    box-shadow:0 10px 24px rgba(0,0,0,0.18);
-  }
-
-  .q-card:has(select:focus){
-    border-color:var(--cyan);
-    box-shadow:0 0 0 4px rgba(34,211,238,0.12);
-  }
-
-  .q-card.answered{
-    border-color:rgba(74,222,128,0.42);
-    background:rgba(74,222,128,0.08);
-  }
-
-  .q-number{
-    font-size:0.82rem;
-    font-weight:800;
-    color:#c4b5fd;
-    margin-bottom:8px;
-    letter-spacing:0.5px;
-    text-transform:uppercase;
-  }
-
-  .error, .success{
-    display:none;
-    margin-top:18px;
-    padding:14px 16px;
-    border-radius:16px;
-    font-weight:700;
-  }
-
-  .error{
-    background:rgba(255,123,156,0.12);
-    border:1px solid rgba(255,123,156,0.35);
-    color:#ffe4eb;
-  }
-
-  .success{
-    background:rgba(74,222,128,0.12);
-    border:1px solid rgba(74,222,128,0.35);
-    color:#dcfce7;
-  }
-
-  .btn{
-    width:100%;
-    border:none;
-    border-radius:18px;
-    padding:16px 18px;
-    margin-top:18px;
-    font-size:1rem;
-    font-weight:900;
-    color:#fff;
-    cursor:pointer;
-    background:linear-gradient(90deg, var(--pink), var(--purple), var(--cyan));
-    box-shadow:0 12px 30px rgba(124,58,237,0.35);
-    transition:transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-  }
-
-  .btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 16px 34px rgba(124,58,237,0.42);
-  }
-
-  .btn:disabled{
-    opacity:0.7;
-    cursor:not-allowed;
-    transform:none;
-    box-shadow:0 12px 30px rgba(124,58,237,0.2);
-  }
-
-  .footer-note{
-    text-align:center;
-    color:var(--muted);
-    font-size:0.92rem;
-    margin-top:14px;
-    line-height:1.5;
-  }
-
-  @media (min-width: 760px){
-    .grid{
-      grid-template-columns:1fr 1fr;
+  <style>
+    :root{
+      --bg1:#140f2d;
+      --bg2:#0f2d52;
+      --bg3:#0b1220;
+      --card:rgba(255,255,255,0.1);
+      --card2:rgba(255,255,255,0.07);
+      --border:rgba(255,255,255,0.16);
+      --text:#ffffff;
+      --muted:#dbeafe;
+      --pink:#ff4fd8;
+      --purple:#7c3aed;
+      --cyan:#22d3ee;
+      --yellow:#f59e0b;
+      --danger:#ff7b9c;
+      --success:#4ade80;
     }
-  }
 
-  @media (max-width: 759px){
+    *{box-sizing:border-box}
+
+    html{
+      scroll-behavior:smooth;
+    }
+
     body{
-      padding:14px;
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,79,216,0.28), transparent 20%),
+        radial-gradient(circle at 85% 20%, rgba(34,211,238,0.2), transparent 25%),
+        radial-gradient(circle at 30% 90%, rgba(245,158,11,0.14), transparent 20%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      min-height:100vh;
+      padding:20px;
+    }
+
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+    }
+
+    .hero{
+      text-align:center;
+      margin-bottom:18px;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.14);
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(2.2rem,4vw,4rem);
+      line-height:1.02;
+    }
+
+    .hero-warning{
+      margin:12px 0 0;
+      font-weight:800;
+      font-size:1rem;
+      color:#fde68a;
+      letter-spacing:0.2px;
+    }
+
+    .hero p{
+      margin:12px auto 0;
+      max-width:700px;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:1.02rem;
     }
 
     .panel{
-      padding:16px;
-      border-radius:22px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:22px;
+      backdrop-filter:blur(14px);
+      box-shadow:0 18px 50px rgba(0,0,0,0.3);
     }
 
-    .q-card{
-      padding:18px;
+    .notice{
+      background:linear-gradient(90deg, rgba(255,79,216,0.12), rgba(34,211,238,0.12));
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:18px;
+      padding:14px 16px;
+      margin-bottom:20px;
+      color:#f8fafc;
+      line-height:1.5;
+    }
+
+    .field{
+      margin-bottom:18px;
+    }
+
+    label{
+      display:block;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:0.93rem;
+      margin-bottom:10px;
+      line-height:1.45;
+    }
+
+    .mini-rule{
+      display:inline-block;
+      margin-top:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(245,158,11,0.12);
+      border:1px solid rgba(245,158,11,0.28);
+      color:#fde68a;
+      font-size:0.86rem;
+      font-weight:700;
     }
 
     select{
-      padding:15px 14px;
+      width:100%;
+      padding:14px 15px;
+      border:none;
+      border-radius:16px;
+      background:rgba(10,15,28,0.8);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.14);
+      outline:none;
       font-size:1rem;
+      transition:border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+    }
+
+    select:focus{
+      border-color:var(--cyan);
+      box-shadow:0 0 0 4px rgba(34,211,238,0.15);
+    }
+
+    select:disabled{
+      opacity:0.65;
+      cursor:not-allowed;
     }
 
     .progress-wrap{
-      top:8px;
-      padding:12px;
+      position:sticky;
+      top:10px;
+      z-index:20;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(15,23,42,0.75);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,0.08);
+      margin:18px 0 24px;
+      box-shadow:0 12px 28px rgba(0,0,0,0.18);
+    }
+
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size:0.95rem;
+      color:var(--muted);
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+
+    .progress-bar{
+      width:100%;
+      height:14px;
+      background:rgba(255,255,255,0.08);
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--pink), var(--purple), var(--cyan));
+      transition:width 0.25s ease;
+    }
+
+    .section{
+      margin:28px 0 18px;
+      padding-top:10px;
+      border-top:1px solid rgba(255,255,255,0.08);
+    }
+
+    .section:first-of-type{
+      border-top:none;
+      padding-top:0;
     }
 
     .section-title{
-      font-size:1.2rem;
+      font-size:1.35rem;
+      font-weight:900;
+      margin:0 0 6px;
+      color:#fff;
     }
-  }
-</style>
+
+    .section-sub{
+      margin:0 0 18px;
+      color:#cbd5e1;
+      font-size:0.96rem;
+      line-height:1.45;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+
+    .q-card{
+      background:var(--card2);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:20px;
+      padding:16px;
+      transition:transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+    }
+
+    .q-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(255,255,255,0.22);
+      box-shadow:0 10px 24px rgba(0,0,0,0.18);
+    }
+
+    .q-card:has(select:focus){
+      border-color:var(--cyan);
+      box-shadow:0 0 0 4px rgba(34,211,238,0.12);
+    }
+
+    .q-card.answered{
+      border-color:rgba(74,222,128,0.42);
+      background:rgba(74,222,128,0.08);
+    }
+
+    .q-card.locked{
+      opacity:0.72;
+    }
+
+    .q-card.current{
+      border-color:rgba(34,211,238,0.35);
+      box-shadow:0 0 0 3px rgba(34,211,238,0.08);
+    }
+
+    .q-number{
+      font-size:0.82rem;
+      font-weight:800;
+      color:#c4b5fd;
+      margin-bottom:8px;
+      letter-spacing:0.5px;
+      text-transform:uppercase;
+    }
+
+    .error, .success{
+      display:none;
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:16px;
+      font-weight:700;
+      line-height:1.5;
+    }
+
+    .error{
+      background:rgba(255,123,156,0.12);
+      border:1px solid rgba(255,123,156,0.35);
+      color:#ffe4eb;
+    }
+
+    .success{
+      background:rgba(74,222,128,0.12);
+      border:1px solid rgba(74,222,128,0.35);
+      color:#dcfce7;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:18px;
+      padding:16px 18px;
+      margin-top:18px;
+      font-size:1rem;
+      font-weight:900;
+      color:#fff;
+      cursor:pointer;
+      background:linear-gradient(90deg, var(--pink), var(--purple), var(--cyan));
+      box-shadow:0 12px 30px rgba(124,58,237,0.35);
+      transition:transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 16px 34px rgba(124,58,237,0.42);
+    }
+
+    .btn:disabled{
+      opacity:0.75;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:0 12px 30px rgba(124,58,237,0.2);
+    }
+
+    .footer-note{
+      text-align:center;
+      color:var(--muted);
+      font-size:0.92rem;
+      margin-top:14px;
+      line-height:1.5;
+    }
+
+    @media (min-width: 760px){
+      .grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width: 759px){
+      body{
+        padding:14px;
+      }
+
+      .panel{
+        padding:16px;
+        border-radius:22px;
+      }
+
+      .q-card{
+        padding:18px;
+      }
+
+      select{
+        padding:15px 14px;
+        font-size:1rem;
+      }
+
+      .progress-wrap{
+        top:8px;
+        padding:12px;
+      }
+
+      .section-title{
+        font-size:1.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="wrap">
     <div class="hero">
       <div class="badge">GC Awards • Anonymous Voting</div>
       <h1>Group Chat Survey 👀</h1>
-      <h2> BE UNBIASED. KEEP THE HATE FOR LATER ON!</h2>
+      <p class="hero-warning">Be unbiased. Keep the hate for later on.</p>
       <p>
-        Pick your name, answer every question, and send it through.
+        Pick your name, answer every question in order, and send it through.
         You can’t vote for yourself, and the results will be revealed later.
       </p>
     </div>
@@ -359,7 +374,7 @@
     <div class="panel">
       <div class="notice">
         <strong>Heads up:</strong> once you submit, that name is locked and can’t submit again.
-        The results stay hidden until reveal time.
+        Questions unlock one by one, and results stay hidden until reveal time.
       </div>
 
       <form id="surveyForm">
@@ -369,11 +384,12 @@
           <select id="personName" required>
             <option value="">Select your name</option>
           </select>
+          <div class="mini-rule">No self-voting allowed.</div>
         </div>
 
         <div class="progress-wrap">
           <div class="progress-top">
-            <span id="progressText">0 / 51 answered</span>
+            <span id="progressText">0 / 0 answered</span>
             <span id="progressPercent">0%</span>
           </div>
           <div class="progress-bar">
@@ -386,8 +402,8 @@
         <div class="error" id="errorBox"></div>
         <div class="success" id="successBox"></div>
 
-        <button class="btn" id="submitBtn" type="submit">Submit My Answers</button>
-        <div class="footer-note">The answers will be revealed shortly after everyone finishes.</div>
+        <button class="btn" id="submitBtn" type="submit" disabled>Select your name first</button>
+        <div class="footer-note">Results will be revealed once everyone has submitted.</div>
       </form>
     </div>
   </div>
@@ -423,89 +439,89 @@
       "Liekha"
     ];
 
-   const sections = [
-  {
-    title: "Personality",
-    subtitle: "Core aura, vibes, and how people see each other.",
-    questions: [
-      "Who has the most aura?",
-      "Who has the highest IQ?",
-      "Who is the most nonchalant 😐",
-      "Who is the biggest overthinker?",
-      "Who is the most delusional?",
-      "Who has main character energy?",
-      "Who acts innocent but definitely isn’t?",
-      "Who has the best drip?",
-      "Who is always late?",
-      "Who is the biggest hype person?"
-    ]
-  },
-  {
-    title: "Chaos",
-    subtitle: "",
-    questions: [
-      "Who is the biggest ragebaiter 😭",
-      "Who would argue even if they’re wrong?",
-      "Who is the biggest instigator?",
-      "Who is most likely to gaslight the group?",
-      "Who leaves people on delivered the longest?",
-      "Who smells the nicest?",
-      "Who is the most trustworthy?",
-      "Who is the most mature for their age?",
-      "Who is the group's biggest pick me?"
-    ]
-  },
-  {
-    title: "Life Predictions",
-    subtitle: "Who’s actually making it, fumbling it, or somehow both.",
-    questions: [
-      "Who is most likely to be successful?",
-      "Who is the most street smart?",
-      "Who is the most book smart?",
-      "Who gives the best advice?",
-      "Who gives the worst advice?",
-      "Who is most likely to get rich?",
-      "Who is most likely to get cancelled?",
-      "Who is the most cultural?",
-      "Who is the most dopey?",
-      "Who would you wanna be for 24 hours?",
-      "If everyone was the same age, who is most likely to get married first?"
-    ]
-  },
-  {
-    title: "Public Embarrassment",
-    subtitle: "Unfortunate scenes",
-    questions: [
-      "Who is balding first 😭",
-      "Who would get caught doing something embarrassing?",
-      "Who is most likely to trip in public?",
-      "Who is most likely to get rejected?",
-      "Who would fold under 0 pressure?",
-      "Who is most likely to embarrass the group in public?",
-      "Who laughs during serious moments?"
-    ]
-  },
-  {
-    title: "For the chaos...",
-    subtitle: "I apologise in advance...",
-    questions: [
-      "Who thinks they’re better than everyone else? 😭",
-      "Who is the biggest attention seeker?",
-      "Who would snitch first in a serious situation?",
-      "Who has the worst takes in the group?",
-      "Who is the most fake nice?",
-      "Who acts the toughest but isn’t?",
-      "Who would switch up the fastest?",
-      "Who is the biggest hypocrite?",
-      "Who thinks they’re always right?",
-      "Who is the biggest snake?",
-      "Who is the meanest?",
-      "Who is most likely to cheat?",
-      "Who is most likely to get cheated on?",
-      "Who is the most replacable?"
-    ]
-  }
-];
+    const sections = [
+      {
+        title: "Personality",
+        subtitle: "Core aura, vibes, and how people see each other.",
+        questions: [
+          "Who has the most aura?",
+          "Who has the highest IQ?",
+          "Who is the most nonchalant 😐",
+          "Who is the biggest overthinker?",
+          "Who is the most delusional?",
+          "Who has main character energy?",
+          "Who acts innocent but definitely isn’t?",
+          "Who has the best drip?",
+          "Who is always late?",
+          "Who is the biggest hype person?"
+        ]
+      },
+      {
+        title: "Chaos",
+        subtitle: "",
+        questions: [
+          "Who is the biggest ragebaiter 😭",
+          "Who would argue even if they’re wrong?",
+          "Who is the biggest instigator?",
+          "Who is most likely to gaslight the group?",
+          "Who leaves people on delivered the longest?",
+          "Who smells the nicest?",
+          "Who is the most trustworthy?",
+          "Who is the most mature for their age?",
+          "Who is the group's biggest pick me?"
+        ]
+      },
+      {
+        title: "Life Predictions",
+        subtitle: "Who’s actually making it, fumbling it, or somehow both.",
+        questions: [
+          "Who is most likely to be successful?",
+          "Who is the most street smart?",
+          "Who is the most book smart?",
+          "Who gives the best advice?",
+          "Who gives the worst advice?",
+          "Who is most likely to get rich?",
+          "Who is most likely to get cancelled?",
+          "Who is the most cultural?",
+          "Who is the most dopey?",
+          "Who would you wanna be for 24 hours?",
+          "If everyone was the same age, who is most likely to get married first?"
+        ]
+      },
+      {
+        title: "Public Embarrassment",
+        subtitle: "Unfortunate scenes",
+        questions: [
+          "Who is balding first 😭",
+          "Who would get caught doing something embarrassing?",
+          "Who is most likely to trip in public?",
+          "Who is most likely to get rejected?",
+          "Who would fold under 0 pressure?",
+          "Who is most likely to embarrass the group in public?",
+          "Who laughs during serious moments?"
+        ]
+      },
+      {
+        title: "For the chaos...",
+        subtitle: "I apologise in advance...",
+        questions: [
+          "Who thinks they’re better than everyone else? 😭",
+          "Who is the biggest attention seeker?",
+          "Who would snitch first in a serious situation?",
+          "Who has the worst takes in the group?",
+          "Who is the most fake nice?",
+          "Who acts the toughest but isn’t?",
+          "Who would switch up the fastest?",
+          "Who is the biggest hypocrite?",
+          "Who thinks they’re always right?",
+          "Who is the biggest snake?",
+          "Who is the meanest?",
+          "Who is most likely to cheat?",
+          "Who is most likely to get cheated on?",
+          "Who is the most replacable?"
+        ]
+      }
+    ];
 
     const flattenedQuestions = [];
     sections.forEach((section, sIndex) => {
@@ -529,6 +545,7 @@
     const progressText = document.getElementById("progressText");
     const progressPercent = document.getElementById("progressPercent");
     const progressFill = document.getElementById("progressFill");
+    const surveyForm = document.getElementById("surveyForm");
 
     allNames.forEach(name => {
       const option = document.createElement("option");
@@ -558,7 +575,10 @@
           const questionId = `q${globalQuestionNumber}`;
 
           const card = document.createElement("div");
-          card.className = "q-card";
+          card.className = "q-card locked";
+          card.dataset.questionId = questionId;
+          card.dataset.questionNumber = globalQuestionNumber;
+
           card.innerHTML = `
             <div class="q-number">Question ${globalQuestionNumber}</div>
             <label for="${questionId}">${questionText}</label>
@@ -566,6 +586,7 @@
               <option value="">Choose someone</option>
             </select>
           `;
+
           grid.appendChild(card);
           globalQuestionNumber++;
         });
@@ -584,6 +605,11 @@
       errorBox.style.display = "none";
     }
 
+    function hideMessages() {
+      errorBox.style.display = "none";
+      successBox.style.display = "none";
+    }
+
     function fillDropdown(selectId, names) {
       const select = document.getElementById(selectId);
       const currentValue = select.value;
@@ -598,29 +624,76 @@
 
       if (names.includes(currentValue)) {
         select.value = currentValue;
+      } else {
+        select.value = "";
       }
-
-      select.disabled = false;
     }
 
-    function updateAnswerLists() {
+    function getFirstUnansweredIndex() {
+      for (let i = 0; i < flattenedQuestions.length; i++) {
+        const select = document.getElementById(flattenedQuestions[i].id);
+        if (!select.value) return i;
+      }
+      return -1;
+    }
+
+    function scrollToQuestion(index) {
+      if (index < 0 || index >= flattenedQuestions.length) return;
+      const select = document.getElementById(flattenedQuestions[index].id);
+      const card = select.closest(".q-card");
+
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      setTimeout(() => {
+        if (!select.disabled) {
+          select.focus();
+        }
+      }, 350);
+    }
+
+    function updateSequentialLocks() {
       const currentUser = nameSelect.value;
+      const availableNames = allNames.filter(name => name !== currentUser);
 
-      flattenedQuestions.forEach(q => {
+      flattenedQuestions.forEach((q, index) => {
         const select = document.getElementById(q.id);
+        const card = select.closest(".q-card");
 
-        if (!currentUser) {
-          select.innerHTML = '<option value="">Choose someone</option>';
-          select.disabled = true;
-          return;
+        fillDropdown(q.id, currentUser ? availableNames : []);
+
+        let shouldEnable = false;
+
+        if (currentUser) {
+          if (index === 0) {
+            shouldEnable = true;
+          } else {
+            const prevSelect = document.getElementById(flattenedQuestions[index - 1].id);
+            shouldEnable = !!prevSelect.value;
+          }
         }
 
-        fillDropdown(q.id, allNames.filter(name => name !== currentUser));
+        if (!shouldEnable) {
+          select.disabled = true;
+
+          if (select.value) {
+            select.value = "";
+          }
+        } else {
+          select.disabled = false;
+        }
+
+        card.classList.toggle("answered", !!select.value);
+        card.classList.toggle("locked", select.disabled);
+        card.classList.remove("current");
       });
 
-      errorBox.style.display = "none";
-      successBox.style.display = "none";
-      updateProgress();
+      const firstUnansweredIndex = getFirstUnansweredIndex();
+      if (firstUnansweredIndex !== -1 && nameSelect.value) {
+        const currentCard = document.getElementById(flattenedQuestions[firstUnansweredIndex].id).closest(".q-card");
+        currentCard.classList.add("current");
+      }
     }
 
     function updateProgress() {
@@ -635,40 +708,79 @@
       progressText.textContent = `${answered} / ${TOTAL_QUESTIONS} answered`;
       progressPercent.textContent = `${percent}%`;
       progressFill.style.width = `${percent}%`;
+
+      if (!nameSelect.value) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Select your name first";
+      } else if (answered < TOTAL_QUESTIONS) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = `Can't submit - answer all questions (${answered}/${TOTAL_QUESTIONS})`;
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit My Answers";
+      }
+    }
+
+    function updateAllUI() {
+      updateSequentialLocks();
+      updateProgress();
     }
 
     renderQuestions();
+    updateProgress();
 
-    nameSelect.addEventListener("change", updateAnswerLists);
-
-    flattenedQuestions.forEach(q => {
-      document.addEventListener("change", (e) => {
-        if (e.target && e.target.id === q.id) {
-          updateProgress();
-        }
-      });
+    nameSelect.addEventListener("change", () => {
+      hideMessages();
+      updateAllUI();
+      if (nameSelect.value) {
+        scrollToQuestion(0);
+      }
     });
 
-    document.getElementById("surveyForm").addEventListener("submit", async (e) => {
+    document.addEventListener("change", (e) => {
+      if (!e.target || !e.target.matches("select")) return;
+      if (e.target.id === "personName") return;
+
+      hideMessages();
+      updateAllUI();
+    });
+
+    surveyForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const currentUser = nameSelect.value;
       if (!currentUser) {
         showError("Please select your name first.");
+        nameSelect.scrollIntoView({ behavior: "smooth", block: "center" });
+        nameSelect.focus();
+        return;
+      }
+
+      const firstUnansweredIndex = getFirstUnansweredIndex();
+      if (firstUnansweredIndex !== -1) {
+        showError("Can't submit - you haven't answered all the questions yet.");
+        scrollToQuestion(firstUnansweredIndex);
         return;
       }
 
       const answers = {};
       for (const q of flattenedQuestions) {
         const value = document.getElementById(q.id).value;
+
         if (!value) {
-          showError("Please answer every question before submitting.");
+          showError("Can't submit - you haven't answered all the questions yet.");
+          const idx = flattenedQuestions.findIndex(item => item.id === q.id);
+          scrollToQuestion(idx);
           return;
         }
+
         if (value === currentUser) {
           showError("You can’t vote for yourself.");
+          const idx = flattenedQuestions.findIndex(item => item.id === q.id);
+          scrollToQuestion(idx);
           return;
         }
+
         answers[q.id] = value;
       }
 
@@ -681,8 +793,7 @@
 
         if (existing.exists()) {
           showError("This name has already submitted a response.");
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Submit My Answers";
+          updateProgress();
           return;
         }
 
@@ -699,8 +810,7 @@
       } catch (err) {
         console.error(err);
         showError("Something went wrong while submitting. Try again.");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit My Answers";
+        updateProgress();
       }
     });
   </script>
