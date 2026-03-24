@@ -418,10 +418,7 @@
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const allNames = [
-      "TEST1",
-      "TEST2",
-      "TEST3",
-      "TEST4",
+      
       "Tulika",
       "Eric",
       "Novo",
@@ -439,89 +436,78 @@
       "Liekha"
     ];
 
-    const sections = [
-      {
-        title: "Personality",
-        subtitle: "Core aura, vibes, and how people see each other.",
-        questions: [
-          "Who has the most aura?",
-          "Who has the highest IQ?",
-          "Who is the most nonchalant 😐",
-          "Who is the biggest overthinker?",
-          "Who is the most delusional?",
-          "Who has main character energy?",
-          "Who acts innocent but definitely isn’t?",
-          "Who has the best drip?",
-          "Who is always late?",
-          "Who is the biggest hype person?"
-        ]
-      },
-      {
-        title: "Chaos",
-        subtitle: "",
-        questions: [
-          "Who is the biggest ragebaiter 😭",
-          "Who would argue even if they’re wrong?",
-          "Who is the biggest instigator?",
-          "Who is most likely to gaslight the group?",
-          "Who leaves people on delivered the longest?",
-          "Who smells the nicest?",
-          "Who is the most trustworthy?",
-          "Who is the most mature for their age?",
-          "Who is the group's biggest pick me?"
-        ]
-      },
-      {
-        title: "Life Predictions",
-        subtitle: "Who’s actually making it, fumbling it, or somehow both.",
-        questions: [
-          "Who is most likely to be successful?",
-          "Who is the most street smart?",
-          "Who is the most book smart?",
-          "Who gives the best advice?",
-          "Who gives the worst advice?",
-          "Who is most likely to get rich?",
-          "Who is most likely to get cancelled?",
-          "Who is the most cultural?",
-          "Who is the most dopey?",
-          "Who would you wanna be for 24 hours?",
-          "If everyone was the same age, who is most likely to get married first?"
-        ]
-      },
-      {
-        title: "Public Embarrassment",
-        subtitle: "Unfortunate scenes",
-        questions: [
-          "Who is balding first 😭",
-          "Who would get caught doing something embarrassing?",
-          "Who is most likely to trip in public?",
-          "Who is most likely to get rejected?",
-          "Who would fold under 0 pressure?",
-          "Who is most likely to embarrass the group in public?",
-          "Who laughs during serious moments?"
-        ]
-      },
-      {
-        title: "For the chaos...",
-        subtitle: "I apologise in advance...",
-        questions: [
-          "Who thinks they’re better than everyone else? 😭",
-          "Who is the biggest attention seeker?",
-          "Who would snitch first in a serious situation?",
-          "Who has the worst takes in the group?",
-          "Who is the most fake nice?",
-          "Who acts the toughest but isn’t?",
-          "Who would switch up the fastest?",
-          "Who is the biggest hypocrite?",
-          "Who thinks they’re always right?",
-          "Who is the biggest snake?",
-          "Who is the meanest?",
-          "Who is most likely to cheat?",
-          "Who is most likely to get cheated on?",
-          "Who is the most replacable?"
-        ]
-      }
-    ];
+const sections = [
+  {
+    title: "Personality",
+    subtitle: "Core aura, vibes, and how people see each other.",
+    questions: [
+      "Who has the most aura?",
+      "Who has the highest IQ?",
+      "Who is the most nonchalant 😐",
+      "Who is the biggest overthinker?",
+      "Who has main character energy?",
+      "Who acts innocent but definitely isn’t?",
+      "Who has the best drip?",
+      "Who is always late?",
+      "Who is the biggest hype person?"
+    ]
+  },
+  {
+    title: "Chaos",
+    subtitle: "",
+    questions: [
+      "Who is the biggest ragebaiter 😭",
+      "Who would argue even if they’re wrong?",
+      "Who is the biggest instigator?",
+      "Who is most likely to gaslight the group?",
+      "Who leaves people on delivered the longest?",
+      "Who laughs during serious moments?"
+    ]
+  },
+  {
+    title: "Life Predictions",
+    subtitle: "Who’s actually making it, fumbling it, or somehow both.",
+    questions: [
+      "Who is most likely to be successful?",
+      "Who is the most street smart?",
+      "Who is the most book smart?",
+      "Who gives the best advice?",
+      "Who gives the worst advice?",
+      "Who is most likely to get rich?",
+      "Who is most likely to get cancelled?",
+      "Who would you wanna be for 24 hours?",
+      "If everyone was the same age, who is most likely to get married first?"
+    ]
+  },
+  {
+    title: "Public Embarrassment",
+    subtitle: "Unfortunate scenes",
+    questions: [
+      "Who would get caught doing something embarrassing?",
+      "Who is most likely to trip in public?",
+      "Who is most likely to get rejected?",
+      "Who would fold under 0 pressure?",
+      "Who is most likely to embarrass the group in public?"
+    ]
+  },
+  {
+    title: "For the chaos...",
+    subtitle: "I apologise in advance...",
+    questions: [
+      "Who thinks they’re better than everyone else? 😭",
+      "Who is the biggest attention seeker?",
+      "Who would snitch first in a serious situation?",
+      "Who has the worst takes in the group?",
+      "Who is the most fake nice?",
+      "Who acts the toughest but isn’t?",
+      "Who would switch up the fastest?",
+      "Who is the biggest hypocrite?",
+      "Who thinks they’re always right?",
+      "Who is the biggest snake?",
+      "Who is the meanest?"
+    ]
+  }
+];
 
     const flattenedQuestions = [];
     sections.forEach((section, sIndex) => {
