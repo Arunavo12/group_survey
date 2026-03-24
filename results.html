@@ -5,21 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Survey Results</title>
   <style>
+    :root{
+      --bg1:#140f2d;
+      --bg2:#0f2d52;
+      --bg3:#0b1220;
+      --card:rgba(255,255,255,0.12);
+      --card2:rgba(255,255,255,0.09);
+      --border:rgba(255,255,255,0.18);
+      --text:#ffffff;
+      --muted:#dbeafe;
+      --pink:#ff4fd8;
+      --purple:#7c3aed;
+      --cyan:#22d3ee;
+      --yellow:#f59e0b;
+      --success:#4ade80;
+    }
+
+    *{box-sizing:border-box}
+
     body{
       margin:0;
       min-height:100vh;
       padding:24px;
       font-family:Arial, Helvetica, sans-serif;
-      color:#fff;
+      color:var(--text);
       background:
         radial-gradient(circle at 10% 10%, rgba(255,79,216,0.35), transparent 22%),
         radial-gradient(circle at 90% 20%, rgba(34,211,238,0.28), transparent 24%),
         radial-gradient(circle at 30% 90%, rgba(245,158,11,0.20), transparent 24%),
-        linear-gradient(135deg, #1a103d, #0f2d52 45%, #0f172a);
+        linear-gradient(135deg, var(--bg1), var(--bg2) 45%, var(--bg3));
     }
 
     .wrap{
-      max-width:1200px;
+      max-width:1500px;
       margin:0 auto;
     }
 
@@ -28,79 +46,226 @@
       margin-bottom:24px;
     }
 
+    .badge{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.14);
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
     .hero h1{
       margin:0 0 10px;
       font-size:clamp(2rem, 4vw, 3.6rem);
+      line-height:1.05;
     }
 
     .hero p{
       margin:0;
-      color:#dbeafe;
+      color:var(--muted);
+      line-height:1.5;
     }
 
-    .locked, .grid{
-      background:rgba(255,255,255,0.12);
-      border:1px solid rgba(255,255,255,0.18);
+    .top-stats{
+      display:none;
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .stat-card,
+    .locked,
+    .grid{
+      background:var(--card);
+      border:1px solid var(--border);
       border-radius:28px;
       padding:24px;
       backdrop-filter:blur(16px);
       box-shadow:0 20px 60px rgba(0,0,0,0.35);
     }
 
+    .stat-card{
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .stat-label{
+      color:var(--muted);
+      font-size:0.92rem;
+      margin-bottom:6px;
+    }
+
+    .stat-value{
+      font-size:1.9rem;
+      font-weight:900;
+    }
+
     .locked{
       text-align:center;
     }
 
+    .locked h2{
+      margin-top:0;
+      margin-bottom:10px;
+    }
+
+    .locked p{
+      color:var(--muted);
+      margin-bottom:0;
+    }
+
     .grid{
       display:none;
-      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-      gap:18px;
+      grid-template-columns:repeat(auto-fit, minmax(420px, 1fr));
+      gap:20px;
     }
 
     .card{
-      background:rgba(255,255,255,0.09);
+      background:var(--card2);
       border:1px solid rgba(255,255,255,0.15);
-      border-radius:20px;
-      padding:18px;
+      border-radius:22px;
+      padding:20px;
+    }
+
+    .question-no{
+      font-size:0.8rem;
+      color:#c4b5fd;
+      font-weight:800;
+      letter-spacing:0.5px;
+      text-transform:uppercase;
+      margin-bottom:8px;
     }
 
     .card h3{
-      margin:0 0 10px;
+      margin:0 0 12px;
       font-size:1.05rem;
-      line-height:1.4;
+      line-height:1.45;
     }
 
     .winner{
-      margin-bottom:12px;
+      margin-bottom:14px;
       color:#e0f2fe;
       font-size:0.95rem;
+      font-weight:700;
+      line-height:1.5;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(34,211,238,0.08);
+      border:1px solid rgba(34,211,238,0.16);
+    }
+
+    .chart-wrap{
+      background:linear-gradient(180deg, #ffffff, #f8fafc);
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:14px;
+      min-height:380px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.8);
     }
 
     canvas{
       width:100% !important;
-      height:260px !important;
-      background:#fff;
-      border-radius:16px;
-      padding:8px;
+      height:340px !important;
+    }
+
+    .leaderboard{
+      margin-top:10px;
+      border-top:1px solid rgba(255,255,255,0.1);
+      padding-top:12px;
+    }
+
+    .leaderboard-title{
+      font-size:0.9rem;
+      font-weight:800;
+      color:#dbeafe;
+      margin-bottom:10px;
+    }
+
+    .leader-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      padding:8px 0;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      font-size:0.94rem;
+    }
+
+    .leader-row:last-child{
+      border-bottom:none;
+    }
+
+    .leader-name{
+      font-weight:700;
+      color:#fff;
+    }
+
+    .leader-votes{
+      color:#cbd5e1;
+      white-space:nowrap;
     }
 
     .loading{
       text-align:center;
-      color:#dbeafe;
+      color:var(--muted);
       margin-top:16px;
+    }
+
+    .empty-state{
+      color:var(--muted);
+      font-size:0.95rem;
+      padding:10px 0 4px;
+    }
+
+    @media (max-width: 759px){
+      body{
+        padding:14px;
+      }
+
+      .locked, .grid{
+        padding:16px;
+        border-radius:22px;
+      }
+
+      .card{
+        padding:16px;
+      }
+
+      .chart-wrap{
+        padding:12px;
+        min-height:320px;
+      }
+
+      canvas{
+        height:280px !important;
+      }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="hero">
+      <div class="badge">GC Awards • Reveal Page</div>
       <h1>Group Chat Results 📊</h1>
-      <p>Live reveal page</p>
+      <p>Live results for every question once reveal mode is turned on.</p>
+    </div>
+
+    <div id="topStats" class="top-stats">
+      <div class="stat-card">
+        <div class="stat-label">Total responses</div>
+        <div class="stat-value" id="responseCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total questions</div>
+        <div class="stat-value" id="questionCount">0</div>
+      </div>
     </div>
 
     <div id="lockedMessage" class="locked">
-      <h2 style="margin-top:0;">The answers will be revealed shortly 👀</h2>
-      <p style="color:#dbeafe; margin-bottom:0;">Results are locked right now.</p>
+      <h2>The answers will be revealed shortly 👀</h2>
+      <p>Results are locked right now.</p>
       <div class="loading" id="loadingText">Checking reveal status...</div>
     </div>
 
@@ -119,25 +284,24 @@
 
     const questions = [
       "Who has the most aura?",
-      "Who is the smartest?",
-      "Who is the most chaotic?",
+      "Who has the highest IQ?",
       "Who is the most nonchalant 😐",
       "Who is the biggest overthinker?",
-      "Who is the most delusional (in a good way)?",
+      "Who is the most delusional?",
       "Who has main character energy?",
-      "Who is the most mysterious?",
-      "Who is secretly the funniest but doesn’t try?",
       "Who acts innocent but definitely isn’t?",
+      "Who has the best drip?",
+      "Who is always late?",
+      "Who is the biggest hype person?",
       "Who is the biggest ragebaiter 😭",
-      "Who starts the most arguments?",
       "Who would argue even if they’re wrong?",
       "Who is the biggest instigator?",
       "Who is most likely to gaslight the group?",
-      "Who disappears mid-convo the most?",
-      "Who replies the driest?",
       "Who leaves people on delivered the longest?",
-      "Who switches sides in arguments?",
-      "Who would accidentally expose the group chat?",
+      "Who smells the nicest?",
+      "Who is the most trustworthy?",
+      "Who is the most mature for their age?",
+      "Who is the group's biggest pick me?",
       "Who is most likely to be successful?",
       "Who is the most street smart?",
       "Who is the most book smart?",
@@ -145,17 +309,15 @@
       "Who gives the worst advice?",
       "Who is most likely to get rich?",
       "Who is most likely to get cancelled?",
-      "Who is most likely to go viral?",
-      "Who is most likely to win the lottery but lose the ticket?",
-      "Who survives purely off luck?",
+      "Who is the most cultural?",
+      "Who is the most dopey?",
+      "Who would you wanna be for 24 hours?",
+      "If everyone was the same age, who is most likely to get married first?",
       "Who is balding first 😭",
-      "Who is aging the fastest?",
       "Who would get caught doing something embarrassing?",
-      "Who would laugh at the worst possible time?",
       "Who is most likely to trip in public?",
       "Who is most likely to get rejected?",
-      "Who would fold under pressure?",
-      "Who would survive longest in a zombie apocalypse?",
+      "Who would fold under 0 pressure?",
       "Who is most likely to embarrass the group in public?",
       "Who laughs during serious moments?",
       "Who thinks they’re better than everyone else? 😭",
@@ -167,18 +329,75 @@
       "Who would switch up the fastest?",
       "Who is the biggest hypocrite?",
       "Who thinks they’re always right?",
-      "Who is the most likely to betray the group for personal gain?"
+      "Who is the biggest snake?",
+      "Who is the meanest?",
+      "Who is most likely to cheat?",
+      "Who is most likely to get cheated on?",
+      "Who is the most replacable?"
     ];
+
+    const chartColors = [
+      "#ff4fd8",
+      "#22d3ee",
+      "#f59e0b",
+      "#7c3aed",
+      "#10b981",
+      "#ef4444",
+      "#3b82f6",
+      "#f97316",
+      "#14b8a6",
+      "#e879f9",
+      "#84cc16",
+      "#fb7185",
+      "#6366f1",
+      "#06b6d4",
+      "#facc15",
+      "#8b5cf6",
+      "#ec4899",
+      "#0ea5e9",
+      "#f43f5e"
+    ];
+
+    function getWinnerText(entries) {
+      if (!entries.length) return "No votes yet";
+
+      const topVotes = entries[0][1];
+      const winners = entries
+        .filter(entry => entry[1] === topVotes)
+        .map(entry => entry[0]);
+
+      if (winners.length === 1) {
+        return `Winner: ${winners[0]} (${topVotes} vote${topVotes === 1 ? "" : "s"})`;
+      }
+
+      return `Tie: ${winners.join(", ")} (${topVotes} vote${topVotes === 1 ? "" : "s"} each)`;
+    }
+
+    function createLeaderboard(entries) {
+      if (!entries.length) {
+        return `<div class="empty-state">No votes have been submitted for this question yet.</div>`;
+      }
+
+      return `
+        <div class="leaderboard">
+          <div class="leaderboard-title">Vote breakdown</div>
+          ${entries.map((entry, index) => `
+            <div class="leader-row">
+              <span class="leader-name">#${index + 1} ${entry[0]}</span>
+              <span class="leader-votes">${entry[1]} vote${entry[1] === 1 ? "" : "s"}</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
 
     async function loadResults() {
       const lockedMessage = document.getElementById("lockedMessage");
       const resultsGrid = document.getElementById("resultsGrid");
       const loadingText = document.getElementById("loadingText");
-
-      if (!lockedMessage || !resultsGrid || !loadingText) {
-        console.error("Missing required HTML elements");
-        return;
-      }
+      const topStats = document.getElementById("topStats");
+      const responseCount = document.getElementById("responseCount");
+      const questionCount = document.getElementById("questionCount");
 
       const settingsRef = doc(db, "settings", "main");
       const settingsSnap = await getDoc(settingsRef);
@@ -197,86 +416,93 @@
 
       lockedMessage.style.display = "none";
       resultsGrid.style.display = "grid";
+      topStats.style.display = "grid";
+
+      responseCount.textContent = responses.length;
+      questionCount.textContent = questions.length;
+
       resultsGrid.innerHTML = "";
 
-      let index = 0;
-
-      for (let i = 1; i <= questions.length; i++) {
-        const qid = `q${i}`;
+      questions.forEach((questionText, index) => {
+        const qid = `q${index + 1}`;
         const votes = {};
 
         responses.forEach((data) => {
-          const chosen = data[qid] || data.answers?.[qid];
+          const chosen = data.answers?.[qid] ?? data[qid];
           if (!chosen) return;
           votes[chosen] = (votes[chosen] || 0) + 1;
         });
 
         const entries = Object.entries(votes).sort((a, b) => b[1] - a[1]);
-
-        const winnerText = entries.length
-          ? (() => {
-              const topVotes = entries[0][1];
-              const winners = entries
-                .filter(entry => entry[1] === topVotes)
-                .map(entry => entry[0]);
-              return `Winner: ${winners.join(", ")} (${topVotes} vote${topVotes === 1 ? "" : "s"})`;
-            })()
-          : "No votes yet";
+        const winnerText = getWinnerText(entries);
 
         const card = document.createElement("div");
         card.className = "card";
-        const canvasId = `chart-${index++}`;
+
+        const canvasId = `chart-${index}`;
 
         card.innerHTML = `
-          <h3>Q${i}. ${questions[i - 1]}</h3>
+          <div class="question-no">Question ${index + 1}</div>
+          <h3>${questionText}</h3>
           <div class="winner">${winnerText}</div>
-          <canvas id="${canvasId}"></canvas>
+          <div class="chart-wrap">
+            <canvas id="${canvasId}"></canvas>
+          </div>
+          ${createLeaderboard(entries)}
         `;
 
         resultsGrid.appendChild(card);
 
         if (entries.length > 0) {
           new Chart(document.getElementById(canvasId), {
-            type: "pie",
+            type: "doughnut",
             data: {
               labels: entries.map(entry => entry[0]),
               datasets: [{
                 data: entries.map(entry => entry[1]),
-                backgroundColor: [
-                  "#ff4fd8",
-                  "#22d3ee",
-                  "#f59e0b",
-                  "#7c3aed",
-                  "#10b981",
-                  "#ef4444",
-                  "#3b82f6",
-                  "#f97316",
-                  "#14b8a6",
-                  "#e879f9",
-                  "#84cc16",
-                  "#fb7185",
-                  "#6366f1",
-                  "#06b6d4",
-                  "#facc15"
-                ],
+                backgroundColor: entries.map((_, i) => chartColors[i % chartColors.length]),
                 borderColor: "#ffffff",
-                borderWidth: 2
+                borderWidth: 3,
+                hoverOffset: 10
               }]
             },
             options: {
               responsive: true,
+              maintainAspectRatio: false,
+              cutout: "42%",
+              layout: {
+                padding: 12
+              },
               plugins: {
                 legend: {
                   position: "bottom",
+                  align: "center",
                   labels: {
-                    color: "#111827"
+                    color: "#111827",
+                    padding: 18,
+                    boxWidth: 14,
+                    boxHeight: 14,
+                    font: {
+                      size: 12,
+                      weight: "600"
+                    }
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                      const value = context.raw;
+                      const percent = total ? Math.round((value / total) * 100) : 0;
+                      return `${context.label}: ${value} vote${value === 1 ? "" : "s"} (${percent}%)`;
+                    }
                   }
                 }
               }
             }
           });
         }
-      }
+      });
     }
 
     loadResults().catch(err => {
